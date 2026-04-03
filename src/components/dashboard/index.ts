@@ -1,0 +1,8 @@
+export { Sidebar } from './sidebar'
+export { DashboardHeader } from './dashboard-header'
+export { MetricsRow } from './metrics-row'
+export { HeatmapSection } from './heatmap-section'
+export { PersonasSection } from './personas-section'
+export { InsightsPanel } from './insights-panel'
+export { FrictionPointsPanel } from './friction-points-panel'
+export { AnalysisLoadingSkeleton } from './analysis-loading-skeleton'

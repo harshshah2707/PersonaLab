@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useCallback } from 'react'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -35,7 +35,6 @@ export function HeroSection() {
   const [submittedUrl, setSubmittedUrl] = useState<string>('')
   const { isAuthenticated } = useAuth()
   const router = useRouter()
-  const searchParams = useSearchParams()
 
   const simulateAnalysis = useCallback(async (url: string): Promise<void> => {
     const startTime = Date.now()
@@ -130,6 +129,10 @@ export function HeroSection() {
     setSubmittedUrl('')
   }, [])
 
+  const isLoading = analysisState === 'validating' || analysisState === 'analyzing'
+  const isSuccess = analysisState === 'success'
+  const isError = analysisState === 'error'
+
   return (
     <section className="relative overflow-hidden">
       {/* Background gradient effects */}
@@ -164,9 +167,84 @@ export function HeroSection() {
         <URLInput
           onSubmit={handleURLSubmit}
           isLoading={isLoading}
+          disabled={isLoading || isSuccess}
           placeholder="https://your-saas.com"
           className="max-w-2xl mx-auto mb-8"
         />
+
+        {/* Progress Indicator */}
+        {isLoading && (
+          <div className="max-w-2xl mx-auto mb-8 animate-in fade-in slide-in-from-top-4 duration-300">
+            <div className="bg-secondary/50 rounded-xl border border-border/50 p-6 backdrop-blur-sm">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-3">
+                  <Loader2 className="w-5 h-5 animate-spin text-primary" />
+                  <span className="text-sm font-medium text-foreground">
+                    {ANALYSIS_STAGES[currentStage]?.label || 'Processing...'}
+                  </span>
+                </div>
+                <span className="text-sm text-muted-foreground">{Math.round(progress)}%</span>
+              </div>
+              <Progress value={progress} className="h-2" />
+              <p className="text-xs text-muted-foreground mt-3">
+                This usually takes 15-30 seconds
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Success State */}
+        {isSuccess && (
+          <div className="max-w-2xl mx-auto mb-8 animate-in fade-in slide-in-from-top-4 duration-300">
+            <div className="bg-primary/10 rounded-xl border border-primary/30 p-6">
+              <div className="flex items-center justify-center gap-3">
+                <CheckCircle2 className="w-6 h-6 text-primary" />
+                <span className="text-lg font-medium text-foreground">
+                  Analysis complete! Redirecting...
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Error State */}
+        {isError && error && (
+          <div className="max-w-2xl mx-auto mb-8 animate-in fade-in slide-in-from-top-4 duration-300">
+            <div className="bg-destructive/10 rounded-xl border border-destructive/30 p-6">
+              <div className="flex items-start gap-3">
+                <AlertCircle className="w-5 h-5 text-destructive mt-0.5 flex-shrink-0" />
+                <div className="flex-1 text-left">
+                  <p className="text-sm font-medium text-foreground mb-1">
+                    Analysis Failed
+                  </p>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    {error.message}
+                  </p>
+                  <div className="flex gap-3">
+                    {error.canRetry && (
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={handleRetry}
+                        className="gap-2"
+                      >
+                        <RefreshCw className="w-4 h-4" />
+                        Try Again
+                      </Button>
+                    )}
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={handleCancel}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Trust indicators */}
         <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground">

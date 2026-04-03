@@ -31,14 +31,19 @@ export interface PersonaProfile {
   role: string
   goal: string
   painPoints: string[]
+  motivations: string[]
   quote: string
   conversionLikelihood: number
   behaviorPattern: {
     browsingStyle: 'scanner' | 'reader' | 'explorer'
     decisionSpeed: 'fast' | 'moderate' | 'deliberate'
+    riskTolerance: number
+    priceSensitivity: number
   }
   demographics: {
     age: number
+    gender: string
+    location: string
     techSavviness: number
   }
 }
@@ -89,4 +94,80 @@ export interface AuthState {
   user: User | null
   isLoading: boolean
   isAuthenticated: boolean
+}
+
+// Behavior Simulation Types
+export type InteractionType = 'click' | 'hover' | 'scroll' | 'navigation' | 'form'
+
+export interface Interaction {
+  type: InteractionType
+  element: string
+  timestamp: number
+  duration?: number
+  page: string
+  targetPage?: string
+  metadata?: Record<string, unknown>
+}
+
+export interface SimulationResult {
+  personaId: string
+  interactions: Interaction[]
+  converted: boolean
+  dropOffPoint?: string
+  engagementScore: number
+  conversionLikelihood: number
+  totalDuration: number
+  pagesVisited: string[]
+  finalPage: string
+}
+
+export interface UserState {
+  currentPage: string
+  isActive: boolean
+  frustration: number
+  satisfaction: number
+  timeOnPage: number
+  scrollDepth: number
+  formsStarted: number
+  formsCompleted: number
+}
+
+export interface SimulationConfig {
+  maxInteractions: number
+  maxDuration: number
+  conversionThreshold: number
+  dropOffThreshold: number
+}
+
+export interface WebsitePage {
+  url: string
+  title: string
+  elements: string[]
+  ctaElements: string[]
+  formElements: string[]
+  navigationElements: string[]
+}
+
+export interface WebsiteStructure {
+  pages: WebsitePage[]
+  navigation: {
+    mainLinks: string[]
+    footerLinks: string[]
+  }
+  forms: Array<{
+    type: string
+    fields: string[]
+  }>
+}
+
+export interface WebsiteAnalysis {
+  id: string
+  url: string
+  metrics: MetricsData
+  personas: PersonaProfile[]
+  heatmapPoints: HeatmapPoint[]
+  insights: AIInsight[]
+  frictionPoints: string[]
+  summary: string
+  structure?: WebsiteStructure
 }

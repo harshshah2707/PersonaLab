@@ -1,7 +1,7 @@
 "use client"
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, useEffect, Suspense } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -10,13 +10,22 @@ import { Separator } from '@/components/ui/separator'
 import { Loader2, Mail, Lock, Globe } from 'lucide-react'
 import Link from 'next/link'
 
-export default function LoginPage() {
+function LoginForm() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
-  const { login } = useAuth()
+  const { login, isAuthenticated } = useAuth()
   const router = useRouter()
+  const searchParams = useSearchParams()
+
+  // Handle redirect after successful login
+  useEffect(() => {
+    if (isAuthenticated) {
+      const redirectPath = searchParams.get('redirect') || '/dashboard'
+      router.push(redirectPath)
+    }
+  }, [isAuthenticated, router, searchParams])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -31,10 +40,9 @@ export default function LoginPage() {
     
     try {
       await login(email)
-      router.push('/dashboard')
+      // Redirect will be handled by useEffect
     } catch (err) {
       setError('Invalid credentials. Please try again.')
-    } finally {
       setIsLoading(false)
     }
   }
@@ -44,7 +52,7 @@ export default function LoginPage() {
     setIsLoading(true)
     setTimeout(() => {
       login('demo@gmail.com')
-      router.push('/dashboard')
+      // Redirect will be handled by useEffect
     }, 1000)
   }
 
@@ -153,5 +161,33 @@ export default function LoginPage() {
         </Card>
       </div>
     </div>
+  )
+}
+
+function LoginLoading() {
+  return (
+    <div className="min-h-screen bg-background flex items-center justify-center p-6">
+      <div className="w-full max-w-md">
+        <div className="flex items-center gap-2 justify-center mb-8">
+          <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center">
+            <span className="text-primary-foreground font-bold">P</span>
+          </div>
+          <span className="font-semibold text-xl text-foreground">PersonaLab</span>
+        </div>
+        <Card className="border-border">
+          <CardContent className="p-8 flex items-center justify-center">
+            <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={<LoginLoading />}>
+      <LoginForm />
+    </Suspense>
   )
 }

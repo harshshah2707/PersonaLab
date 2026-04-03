@@ -26,14 +26,19 @@ export const mockAnalysis: WebsiteAnalysis = {
         'Feature comparison unclear',
         'No social proof on pricing page'
       ],
+      motivations: ['Cost efficiency', 'Quick setup', 'Scalability'],
       quote: 'I just wanted to know how much it costs, but had to dig through three pages.',
       conversionLikelihood: 0.72,
       behaviorPattern: {
         browsingStyle: 'scanner',
-        decisionSpeed: 'fast'
+        decisionSpeed: 'fast',
+        riskTolerance: 0.6,
+        priceSensitivity: 0.8
       },
       demographics: {
         age: 32,
+        gender: 'female',
+        location: 'San Francisco',
         techSavviness: 85
       }
     },
@@ -47,14 +52,19 @@ export const mockAnalysis: WebsiteAnalysis = {
         'Integration steps not step-by-step',
         'Missing code examples'
       ],
+      motivations: ['Integration ease', 'Developer experience', 'Reliability'],
       quote: 'As a PM, I need to show my engineering team the integration path. The docs are scattered.',
       conversionLikelihood: 0.65,
       behaviorPattern: {
         browsingStyle: 'reader',
-        decisionSpeed: 'moderate'
+        decisionSpeed: 'moderate',
+        riskTolerance: 0.5,
+        priceSensitivity: 0.6
       },
       demographics: {
         age: 38,
+        gender: 'male',
+        location: 'New York',
         techSavviness: 72
       }
     },
@@ -68,14 +78,19 @@ export const mockAnalysis: WebsiteAnalysis = {
         'Documentation search not working',
         'Response times not documented'
       ],
+      motivations: ['Performance', 'Clean API', 'Documentation quality'],
       quote: 'I tried searching for "authentication flow" but got zero results. That\'s a red flag.',
       conversionLikelihood: 0.58,
       behaviorPattern: {
         browsingStyle: 'explorer',
-        decisionSpeed: 'deliberate'
+        decisionSpeed: 'deliberate',
+        riskTolerance: 0.7,
+        priceSensitivity: 0.4
       },
       demographics: {
         age: 27,
+        gender: 'female',
+        location: 'Austin',
         techSavviness: 95
       }
     }
@@ -168,7 +183,41 @@ export const mockAnalysis: WebsiteAnalysis = {
     'Documentation search returns no results',
     'Missing dark mode affects developer perception'
   ],
-  summary: 'Users hesitate before first action due to unclear value proposition and navigation complexity. Pricing visibility is the primary friction point, with 67% of personas reporting difficulty finding cost information. Technical users show lower conversion due to missing documentation search functionality.'
+  summary: 'Users hesitate before first action due to unclear value proposition and navigation complexity. Pricing visibility is the primary friction point, with 67% of personas reporting difficulty finding cost information. Technical users show lower conversion due to missing documentation search functionality.',
+  structure: {
+    pages: [
+      {
+        url: 'https://example-saas.com',
+        title: 'Home',
+        elements: ['Hero Section', 'Navigation', 'Features Grid', 'CTA Button', 'Footer'],
+        ctaElements: ['Get Started Button', 'Start Free Trial', 'Request Demo'],
+        formElements: ['Email Input', 'Sign Up Form'],
+        navigationElements: ['Home', 'Features', 'Pricing', 'Docs', 'About']
+      },
+      {
+        url: 'https://example-saas.com/pricing',
+        title: 'Pricing',
+        elements: ['Pricing Cards', 'Toggle Switch', 'FAQ Section', 'CTA Buttons'],
+        ctaElements: ['Choose Plan', 'Start Free Trial'],
+        formElements: [],
+        navigationElements: ['Monthly', 'Yearly']
+      }
+    ],
+    navigation: {
+      mainLinks: ['Home', 'Features', 'Pricing', 'Docs', 'About'],
+      footerLinks: ['Privacy', 'Terms', 'Contact', 'Twitter', 'GitHub']
+    },
+    forms: [
+      {
+        type: 'signup',
+        fields: ['email', 'password', 'name']
+      },
+      {
+        type: 'contact',
+        fields: ['name', 'email', 'message']
+      }
+    ]
+  }
 }
 
 export const simulateAuth = async (email: string): Promise<{ user: { id: string; email: string; name: string; createdAt: Date }; token: string }> => {
