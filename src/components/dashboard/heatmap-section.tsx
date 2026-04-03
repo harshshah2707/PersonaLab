@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge'
 
 interface HeatmapSectionProps {
   points: HeatmapPoint[]
+  screenshotUrl?: string
   highlightedPersona?: string | null
 }
 
@@ -50,7 +51,7 @@ const HeatmapDot = memo(({
 
 HeatmapDot.displayName = 'HeatmapDot'
 
-export function HeatmapSection({ points, highlightedPersona }: HeatmapSectionProps) {
+export function HeatmapSection({ points, screenshotUrl, highlightedPersona }: HeatmapSectionProps) {
   const [selectedPoint, setSelectedPoint] = useState<HeatmapPoint | null>(null)
 
   const memoizedPoints = useMemo(() => points, [points])
@@ -86,37 +87,49 @@ export function HeatmapSection({ points, highlightedPersona }: HeatmapSectionPro
           role="img"
           aria-label="Website interaction heatmap"
         >
-          {/* Grid Pattern */}
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)]" />
+          {/* Actual Site Screenshot Background */}
+          {screenshotUrl ? (
+            <img 
+              src={screenshotUrl} 
+              alt="Website Analysis" 
+              className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover/map:opacity-80 transition-opacity duration-700"
+            />
+          ) : (
+            <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent flex items-center justify-center opacity-20">
+               <div className="w-full h-full flex flex-col items-center justify-center space-y-2">
+                 <div className="w-24 h-24 rounded-2xl border border-dashed border-white/10" />
+                 <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/40">Visualizing Synthetic Vision...</span>
+               </div>
+            </div>
+          )}
 
-          {/* Mock premium website UI elements */}
-          <div className="absolute top-0 left-0 right-0 h-14 bg-white/[0.03] border-b border-white/5 flex items-center px-6 justify-between z-10">
-            <div className="flex items-center gap-3">
-              <div className="flex gap-1.5 leading-none">
-                <div className="w-2.5 h-2.5 rounded-full bg-red-500/20" />
-                <div className="w-2.5 h-2.5 rounded-full bg-amber-500/20" />
-                <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/20" />
+          {/* Grid Pattern */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] z-10 pointer-events-none" />
+
+          {/* Fallback Mock UI only if no screenshot */}
+          {!screenshotUrl && (
+            <div className="absolute inset-0 pointer-events-none">
+              <div className="absolute top-0 left-0 right-0 h-14 bg-white/[0.03] border-b border-white/5 flex items-center px-6 justify-between z-10">
+                <div className="flex items-center gap-3">
+                  <div className="flex gap-1.5 leading-none">
+                    <div className="w-2.5 h-2.5 rounded-full bg-red-500/20" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-amber-500/20" />
+                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/20" />
+                  </div>
+                  <div className="w-32 h-2 rounded-full bg-white/5" />
+                </div>
               </div>
-              <div className="w-32 h-2 rounded-full bg-white/5" />
+              
+              <div className="absolute top-24 left-1/2 -translate-x-1/2 w-3/4 h-10 bg-white/[0.04] rounded-xl border border-white/5 shadow-lg shadow-black/20" />
+              
+              <div className="absolute top-48 left-10 w-1/3 h-56 bg-white/[0.02] rounded-2xl border border-white/5 overflow-hidden backdrop-blur-sm">
+                 <div className="absolute top-5 left-5 right-5 h-5 bg-white/10 rounded-md" />
+                 <div className="absolute bottom-5 left-5 right-5 h-12 bg-emerald/10 border border-emerald/20 rounded-xl" />
+              </div>
+              
+              <div className="absolute top-48 right-10 w-1/2 h-56 bg-white/[0.01] rounded-2xl border border-dashed border-white/10" />
             </div>
-            <div className="flex gap-4">
-              <div className="w-12 h-2 rounded-full bg-white/5" />
-              <div className="w-12 h-2 rounded-full bg-white/5" />
-            </div>
-          </div>
-          
-          <div className="absolute top-24 left-1/2 -translate-x-1/2 w-3/4 h-10 bg-white/[0.04] rounded-xl border border-white/5 shadow-lg shadow-black/20" />
-          
-          <div className="absolute top-48 left-10 w-1/3 h-56 bg-white/[0.02] rounded-2xl border border-white/5 overflow-hidden backdrop-blur-sm">
-             <div className="absolute top-5 left-5 right-5 h-5 bg-white/10 rounded-md" />
-             <div className="absolute top-14 left-5 right-12 h-4 bg-white/5 rounded-md" />
-             <div className="absolute top-22 left-5 right-8 h-4 bg-white/5 rounded-md" />
-             <div className="absolute bottom-5 left-5 right-5 h-12 bg-emerald/10 border border-emerald/20 rounded-xl flex items-center justify-center">
-                <div className="w-1/2 h-2.5 bg-emerald/60 rounded-full" />
-             </div>
-          </div>
-          
-          <div className="absolute top-48 right-10 w-1/2 h-56 bg-white/[0.01] rounded-2xl border border-dashed border-white/10 transition-colors group-hover/map:border-white/20" />
+          )}
           
           {/* Heatmap points with memoization */}
           <div className="relative z-20 w-full h-full">

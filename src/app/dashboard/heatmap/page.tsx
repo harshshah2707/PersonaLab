@@ -33,6 +33,7 @@ export default function HeatmapPage() {
             <div className="lg:col-span-8">
                 <HeatmapSection 
                     points={filteredHeatmapPoints}
+                    screenshotUrl={analysis.screenshotUrl}
                     highlightedPersona={selectedPersonaData?.name}
                 />
             </div>

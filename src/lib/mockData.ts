@@ -4,6 +4,7 @@ import type { WebsiteAnalysis, PersonaProfile, AIInsight, HeatmapPoint, MetricsD
 export const mockAnalysis: WebsiteAnalysis = {
   id: 'analysis_001',
   url: 'https://example-saas.com',
+  screenshotUrl: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1600&h=1200', // Premium SaaS Hero Screenshot
   metrics: {
     conversionRate: 3.7,
     uxScore: 82,

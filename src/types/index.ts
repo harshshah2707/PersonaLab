@@ -158,12 +158,14 @@ export interface AIInsight {
 export interface WebsiteAnalysis {
   id: string
   url: string
+  screenshotUrl?: string // Actual snapshot for heatmap background
   metrics: MetricsData
   personas: PersonaProfile[]
   heatmapPoints: HeatmapPoint[]
   insights: AIInsight[]
   frictionPoints: string[]
   summary: string
+  structure?: WebsiteStructure
 }
 
 export interface AuthState {
@@ -236,17 +238,6 @@ export interface WebsiteStructure {
   }>
 }
 
-export interface WebsiteAnalysis {
-  id: string
-  url: string
-  metrics: MetricsData
-  personas: PersonaProfile[]
-  heatmapPoints: HeatmapPoint[]
-  insights: AIInsight[]
-  frictionPoints: string[]
-  summary: string
-  structure?: WebsiteStructure
-}
 
 // Extended analysis result for behavior simulation (test compatibility)
 export interface WebsiteAnalysisResult {
