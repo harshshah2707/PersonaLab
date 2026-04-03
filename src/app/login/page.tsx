@@ -117,7 +117,7 @@ function LoginForm() {
             {/* Divider */}
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <Separator weight="thin" />
+                <Separator />
               </div>
               <div className="relative flex justify-center text-[9px] uppercase tracking-[0.2em] font-black">
                 <span className="bg-background px-4 text-muted-foreground/60">or secure login</span>

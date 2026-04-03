@@ -19,7 +19,7 @@ export default function OverviewPage() {
   const { 
     analysis, 
     isAnalyzing, 
-    selectedId,
+    selectedPersona,
     selectedPersonaData,
     getPersonaSimulation,
     filteredMetrics,
@@ -29,7 +29,7 @@ export default function OverviewPage() {
     isSidebarCollapsed
   } = useDashboard()
 
-  const simulationResult = selectedId ? getPersonaSimulation(selectedId) : null
+  const simulationResult = selectedPersona ? getPersonaSimulation(selectedPersona) : null
 
   return (
     <ErrorBoundary>
@@ -62,7 +62,7 @@ export default function OverviewPage() {
                 />
                 <PersonasSection 
                   personas={analysis.personas}
-                  selectedId={selectedId}
+                  selectedId={selectedPersona}
                   onSelect={(id) => {
                      // The selection is now managed globally in DashboardContext
                   }}

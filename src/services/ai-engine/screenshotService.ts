@@ -2,13 +2,23 @@ import { chromium } from 'playwright'
 
 /**
  * Service to capture screenshots of a given URL.
- * Falls back to a mock/placeholder if Playwright fails or is not available.
+ * Supports both local Chromium and remote Browserless.io (required for Vercel).
  */
 export async function captureScreenshot(url: string): Promise<Buffer | null> {
   console.log(`[ScreenshotService] Capturing ${url}...`)
   
+  const browserWSEndpoint = process.env.BROWSER_WS_ENDPOINT
+  let browser
+
   try {
-    const browser = await chromium.launch({ headless: true })
+    if (browserWSEndpoint) {
+      console.log(`[ScreenshotService] Connecting to remote browser...`)
+      browser = await chromium.connect(browserWSEndpoint)
+    } else {
+      console.log(`[ScreenshotService] Launching local browser...`)
+      browser = await chromium.launch({ headless: true })
+    }
+
     const page = await browser.newPage()
     
     // Set a realistic viewport
@@ -21,7 +31,7 @@ export async function captureScreenshot(url: string): Promise<Buffer | null> {
     await new Promise(res => setTimeout(res, 1000))
     
     const screenshotBuffer = await page.screenshot({ 
-      fullPage: false, // For LLM analysis, the fold is often enough
+      fullPage: false, 
       type: 'jpeg',
       quality: 80 
     })
@@ -29,8 +39,9 @@ export async function captureScreenshot(url: string): Promise<Buffer | null> {
     await browser.close()
     return screenshotBuffer
     
-  } catch (error) {
-    console.error(`[ScreenshotService] Failed to capture ${url}:`, error)
+  } catch (error: any) {
+    console.error(`[ScreenshotService] Failed to capture ${url}:`, error.message)
+    if (browser) await (browser as any).close().catch(() => {})
     return null
   }
 }

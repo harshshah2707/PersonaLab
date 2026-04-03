@@ -3,7 +3,6 @@ import type {
   HistoricalMetrics, 
   HistoricalMetricPoint,
   TimeRange,
-  METRICS_BOUNDS,
   MetricsCalculationConfig,
   SimulationResult
 } from '@/types'
@@ -251,17 +250,17 @@ export function calculatePerformanceComparison(
 } {
   const conversionRateChange = calculateTrend(
     currentMetrics.conversionRate,
-    previousMetrics?.conversionRate ?? null
+    previousMetrics?.conversionRate || 0
   )
   
   const uxScoreChange = calculateTrend(
     currentMetrics.uxScore,
-    previousMetrics?.uxScore ?? null
+    previousMetrics?.uxScore || 0
   )
   
   const engagementChange = calculateTrend(
     currentMetrics.engagement,
-    previousMetrics?.engagement ?? null
+    previousMetrics?.engagement || 0
   )
 
   // Determine overall trend

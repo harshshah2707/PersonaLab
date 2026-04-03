@@ -12,12 +12,12 @@ export default function PersonasPage() {
   const { 
     analysis, 
     isAnalyzing, 
-    selectedId,
+    selectedPersona,
     selectedPersonaData,
     getPersonaSimulation
   } = useDashboard()
 
-  const simulationResult = selectedId ? getPersonaSimulation(selectedId) : null
+  const simulationResult = selectedPersona ? getPersonaSimulation(selectedPersona) : null
 
   return (
     <div className="w-full px-4 sm:px-8 lg:px-12 py-10 max-w-[1600px] mx-auto animate-in fade-in duration-700">
@@ -35,7 +35,7 @@ export default function PersonasPage() {
             <div className="lg:col-span-4">
                 <PersonasSection 
                     personas={analysis.personas}
-                    selectedId={selectedId}
+                    selectedId={selectedPersona}
                     onSelect={() => {}} // Controlled globally
                 />
             </div>
