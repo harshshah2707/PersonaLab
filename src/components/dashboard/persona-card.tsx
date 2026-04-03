@@ -11,14 +11,14 @@ import { User, Target, Zap, AlertCircle, Quote } from 'lucide-react'
 interface PersonaCardProps {
   persona: PersonaProfile
   isSelected: boolean
-  onSelect: (id: string) => void
+  onSelect: (id: string, startChat?: boolean) => void
 }
 
 const conversionVariant = (likelihood: number): string => {
   if (likelihood >= 0.7) return 'bg-emerald/10 text-emerald border-emerald/20'
   if (likelihood >= 0.5) return 'bg-cyan/10 text-cyan border-cyan/20'
   if (likelihood >= 0.3) return 'bg-amber-500/10 text-amber-500 border-amber-500/20'
-  return 'bg-muted text-muted-foreground border-border/50'
+  return 'bg-red-500/10 text-red-500 border-red-500/20'
 }
 
 const browsingStyleLabels: Record<PersonaProfile['behaviorPattern']['browsingStyle'], string> = {
@@ -94,11 +94,27 @@ export const PersonaCard = memo(({ persona, isSelected, onSelect }: PersonaCardP
 
         {/* Quote - Only if selected or on hover */}
         {persona.quote && (
-           <div className="relative pt-4 border-t border-white/5">
-             <Quote className="absolute -top-2 left-0 w-4 h-4 text-emerald/20" />
-             <p className="text-[11px] text-muted-foreground italic leading-relaxed pl-1 transition-colors group-hover:text-foreground/70 line-clamp-2">
-               &ldquo;{persona.quote}&rdquo;
-             </p>
+           <div className="relative pt-4 border-t border-white/5 flex items-center justify-between gap-4 group/quote">
+             <div className="relative flex-1">
+                <Quote className="absolute -top-2 left-0 w-4 h-4 text-emerald/20" />
+                <p className="text-[11px] text-muted-foreground italic leading-relaxed pl-1 transition-colors group-hover:text-foreground/70 line-clamp-2">
+                    &ldquo;{persona.quote}&rdquo;
+                </p>
+             </div>
+             
+             <button 
+                onClick={(e) => {
+                    e.stopPropagation()
+                    onSelect(persona.id, true)
+                }}
+                className={cn(
+                    "p-2 rounded-lg border border-white/10 bg-white/5 text-[9px] font-bold uppercase tracking-widest transition-all",
+                    "hover:bg-emerald hover:text-background hover:scale-105",
+                    isSelected ? "opacity-100 scale-100" : "opacity-0 scale-90 group-hover:opacity-100 group-hover:scale-100"
+                )}
+             >
+                Ask Why
+             </button>
            </div>
         )}
       </CardContent>

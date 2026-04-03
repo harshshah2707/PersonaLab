@@ -17,7 +17,9 @@ interface DashboardContextType {
   isAnalyzing: boolean
   isRefreshing: boolean
   selectedPersona: string | null
-  setSelectedPersona: (id: string | null) => void
+  setSelectedPersona: (id: string | null, startChat?: boolean) => void
+  chattingWithPersonaId: string | null
+  setChattingWithPersonaId: (id: string | null) => void
   selectedPersonaData: PersonaProfile | null
   simulationResults: Map<string, SimulationResult>
   getPersonaSimulation: (personaId: string) => SimulationResult | null
@@ -41,7 +43,8 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
   const [analysis, setAnalysis] = useState<WebsiteAnalysis | null>(null)
   const [isAnalyzing, setIsAnalyzing] = useState(true)
   const [isRefreshing, setIsRefreshing] = useState(false)
-  const [selectedPersona, setSelectedPersona] = useState<string | null>(null)
+  const [selectedPersona, setSelectedPersonaState] = useState<string | null>(null)
+  const [chattingWithPersonaId, setChattingWithPersonaId] = useState<string | null>(null)
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
   const [analysisUrl, setAnalysisUrl] = useState<string>('')
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null)
@@ -172,6 +175,14 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
     }
   }, [analysisUrl])
 
+  // State setter wrapper
+  const setSelectedPersona = useCallback((id: string | null, startChat: boolean = false) => {
+    setSelectedPersonaState(id)
+    if (startChat) {
+      setChattingWithPersonaId(id)
+    }
+  }, [])
+
   // Handle successful data update
   const handleSuccessfulUpdate = useCallback((newAnalysis: WebsiteAnalysis) => {
     setAnalysis(newAnalysis)
@@ -180,7 +191,7 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
     setIsRefreshing(false)
     setIsAnalyzing(false)
     setSelectedPersona(newAnalysis.personas[0]?.id || null)
-  }, [])
+  }, [setSelectedPersona])
 
   // Handle update failure with graceful degradation
   const handleUpdateFailure = useCallback((error: Error) => {
@@ -274,6 +285,8 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
         isRefreshing,
         selectedPersona,
         setSelectedPersona,
+        chattingWithPersonaId,
+        setChattingWithPersonaId,
         selectedPersonaData: selectedPersonaData(),
         simulationResults,
         getPersonaSimulation,
