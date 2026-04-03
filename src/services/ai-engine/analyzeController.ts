@@ -1,12 +1,12 @@
 import { createClient } from '@supabase/supabase-js'
-import { captureScreenshot } from './screenshotService'
+import { runBrowserAgent } from '../browser-agent/browserController'
 import { analyzeWithVision, generateMockAnalysis } from './visionService'
 import type { AnalysisRequest, AnalysisResponse } from '../../types/analysis.types'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
 // Prioritize Service Role for backend writes (bypasses RLS)
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 
-                    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 
+                    process.env.SUPABASE_ANON_KEY || 
                     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || ''
 const supabase = createClient(supabaseUrl, supabaseKey)
 
@@ -23,11 +23,11 @@ export async function runAnalysisPipeline(req: AnalysisRequest): Promise<Analysi
   }
   
   try {
-    // Stage 1: Capture Screenshot
-    const screenshot = await captureScreenshot(url)
+    // Stage 1: Launch Browser Agent (Screenshot + Behavior + Elements)
+    const agentResult = await runBrowserAgent({ url, project_id })
     
-    // Stage 2: Prompt LLM with Screenshot & Build JSON
-    let analysis = await analyzeWithVision(screenshot)
+    // Stage 2: Prompt LLM with Screen + Trace + Clickable Data
+    let analysis = await analyzeWithVision(agentResult.screenshot_buffer || null)
     
     // Fallback to high-quality mock if LLM fails or is empty
     if (!analysis) {
@@ -53,7 +53,9 @@ export async function runAnalysisPipeline(req: AnalysisRequest): Promise<Analysi
         metadata: {
           confidence: analysis.confidence_score,
           time_ms: analysis.analysis_time_ms,
-          reasoning: analysis.reasoning_trace
+          reasoning: analysis.reasoning_trace,
+          screenshot_url: agentResult.screenshot_url,
+          interaction_trace: agentResult.interaction_trace
         }
       })
       

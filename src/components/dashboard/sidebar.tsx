@@ -27,6 +27,7 @@ const navItems = [
 ]
 
 import { useDashboard } from '@/contexts/DashboardContext'
+import { PersonaTraceList } from './persona-trace-list'
 
 interface SidebarProps {
   className?: string
@@ -119,6 +120,9 @@ export function Sidebar({ className }: SidebarProps) {
               )
             })}
           </div>
+
+          {/* Persona Browser Trace Control */}
+          <PersonaTraceList isCollapsed={isCollapsed} />
 
           {/* Bottom Section */}
           <div className="pt-4 border-t border-white/5 space-y-1">

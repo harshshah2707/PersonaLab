@@ -53,8 +53,8 @@ export function mapAnalysisResponseToFrontend(response: AnalysisResponse, url: s
     updatedAt: new Date()
   }))
 
-  // Map Heatmap Points from Friction Points
-  const heatmapPoints: HeatmapPoint[] = response.friction_points.map((fp, i) => ({
+  // Map Heatmap Points from Friction Points with null safety
+  const heatmapPoints: HeatmapPoint[] = (response.friction_points || []).map((fp, i) => ({
     id: `hp_${i + 1}`,
     x: fp.x,
     y: fp.y,
