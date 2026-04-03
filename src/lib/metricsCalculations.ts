@@ -241,7 +241,7 @@ export function filterHistoricalByTimeRange(
 // Calculate performance comparison between time ranges
 export function calculatePerformanceComparison(
   currentMetrics: MetricsData,
-  previousMetrics: MetricsData | null
+  previousMetrics: MetricsData | null | undefined
 ): {
   conversionRateChange: number | null
   uxScoreChange: number | null

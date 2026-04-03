@@ -73,7 +73,7 @@ export function PersonaCards({
   const updateFilter = <K extends keyof PersonaFilters>(key: K, value: PersonaFilters[K]) => {
     onFilterChange?.({
       ...filters,
-      [key]: value === '' ? undefined : value
+      [key]: value
     })
   }
 

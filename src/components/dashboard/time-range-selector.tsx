@@ -4,7 +4,8 @@ import { useState, useCallback } from 'react'
 import { Calendar, Clock, ChevronDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import type { TimeRange, TIME_RANGES, TimeRangeOption } from '@/types'
+import { TIME_RANGES } from '@/types'
+import type { TimeRange, TimeRangeOption } from '@/types'
 
 interface TimeRangeSelectorProps {
   value: TimeRange
