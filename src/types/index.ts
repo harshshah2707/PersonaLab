@@ -1,5 +1,54 @@
 // Core data models for PersonaLab
 
+export type TimeRange = '24h' | '7d' | '30d' | 'all'
+
+export interface TimeRangeOption {
+  value: TimeRange
+  label: string
+  hours: number
+}
+
+export const TIME_RANGES: TimeRangeOption[] = [
+  { value: '24h', label: '24 Hours', hours: 24 },
+  { value: '7d', label: '7 Days', hours: 168 },
+  { value: '30d', label: '30 Days', hours: 720 },
+  { value: 'all', label: 'All Time', hours: Infinity }
+]
+
+export interface HistoricalMetricPoint {
+  timestamp: Date
+  value: number
+}
+
+export interface HistoricalMetrics {
+  timeRange: TimeRange
+  conversionRate: HistoricalMetricPoint[]
+  uxScore: HistoricalMetricPoint[]
+  engagement: HistoricalMetricPoint[]
+  dropOffRisk: Array<{
+    timestamp: Date
+    value: 'low' | 'medium' | 'high'
+  }>
+}
+
+export interface MetricsCalculationConfig {
+  minConversionRate: number
+  maxConversionRate: number
+  minUxScore: number
+  maxUxScore: number
+  minEngagement: number
+  maxEngagement: number
+}
+
+export const METRICS_BOUNDS: MetricsCalculationConfig = {
+  minConversionRate: 0,
+  maxConversionRate: 1,
+  minUxScore: 0,
+  maxUxScore: 100,
+  minEngagement: 0,
+  maxEngagement: 100
+}
+
 export interface User {
   id: string
   email: string
@@ -58,6 +107,7 @@ export interface MetricsData {
     uxScore: number
     engagement: number
   }
+  historical?: HistoricalMetrics
 }
 
 export interface HeatmapPoint {
@@ -70,13 +120,39 @@ export interface HeatmapPoint {
   description: string
 }
 
+export interface InsightEvidence {
+  type: 'metric' | 'heatmap' | 'persona' | 'simulation'
+  data: Record<string, unknown>
+  description: string
+}
+
+export interface InsightImpact {
+  level: 'high' | 'medium' | 'low'
+  estimatedImprovement: string
+  confidence: number
+}
+
+export type InsightImplementationStatus = 'pending' | 'in-progress' | 'completed' | 'dismissed'
+
+export interface InsightStatusHistory {
+  status: InsightImplementationStatus
+  changedAt: Date
+  note?: string
+}
+
 export interface AIInsight {
   id: string
   title: string
   description: string
   priority: 'high' | 'medium' | 'low'
   category: 'navigation' | 'content' | 'conversion' | 'design'
-  impact: 'high' | 'medium' | 'low'
+  recommendation: string
+  impact: InsightImpact
+  evidence: InsightEvidence[]
+  implementationStatus: InsightImplementationStatus
+  statusHistory: InsightStatusHistory[]
+  createdAt: Date
+  updatedAt: Date
 }
 
 export interface WebsiteAnalysis {
@@ -170,4 +246,46 @@ export interface WebsiteAnalysis {
   frictionPoints: string[]
   summary: string
   structure?: WebsiteStructure
+}
+
+// Extended analysis result for behavior simulation (test compatibility)
+export interface WebsiteAnalysisResult {
+  url: string
+  title: string
+  description: string
+  structure: {
+    pages: Array<{
+      url: string
+      title: string
+      elements: string[]
+      loadTime: number
+    }>
+    forms: Array<{
+      id: string
+      type: string
+      fields: string[]
+      hasValidation: boolean
+    }>
+    navigation: {
+      mainLinks: string[]
+      hasSearch: boolean
+      hasBreadcrumbs: boolean
+      depth: number
+    }
+  }
+  content: {
+    topics: string[]
+    targetAudience: {
+      primary: string
+      secondary: string[]
+      industry: string
+      companySize: string
+      technicalLevel: string
+    }
+    language: string
+  }
+  metadata: {
+    analyzedAt: Date
+    processingTime: number
+  }
 }

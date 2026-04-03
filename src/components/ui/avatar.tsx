@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils"
 interface AvatarProps extends React.HTMLAttributes<HTMLDivElement> {
   src?: string
   alt?: string
-  fallback?: string
+  fallback?: React.ReactNode
 }
 
 const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(

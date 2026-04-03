@@ -3,66 +3,70 @@ import { Users, Target, Lightbulb, BarChart3, MousePointer, Shield } from 'lucid
 
 const features = [
   {
-    title: 'AI Personas',
-    description: 'Generate 5 diverse synthetic users based on your target audience demographics and behavior patterns.',
+    title: 'Multi-Persona Synthesis',
+    description: 'Generate 5+ diverse synthetic users with unique demographics, psychological profiles, and varied browsing intent.',
     icon: Users,
-    gradient: 'bg-gradient-to-br from-primary to-emerald-600'
+    delay: 100
   },
   {
-    title: 'Behavior Simulation',
-    description: 'Watch simulated users navigate your product, identifying friction points and conversion barriers.',
+    title: 'Continuous Behavioral Simulation',
+    description: 'Our engine runs hundreds of parallel user paths through your UI to identify bottleneck sequences.',
     icon: Target,
-    gradient: 'bg-gradient-to-br from-accent to-cyan-600'
+    delay: 200
   },
   {
-    title: 'Actionable Insights',
-    description: 'Get specific, prioritized recommendations to improve your UX and conversion rates.',
+    title: 'Friction Point Detection',
+    description: 'Get AI-prioritized lists of specific UX friction points with semantic reasoning for each issue.',
     icon: Lightbulb,
-    gradient: 'bg-gradient-to-br from-yellow-500 to-orange-500'
+    delay: 300
   },
   {
-    title: 'Conversion Metrics',
-    description: 'Track predicted conversion rates, engagement scores, and drop-off risks across all personas.',
+    title: 'Conversion Likelihood Maps',
+    description: 'Real-time heatmaps that predict exactly where users drop off based on their psychographic profiles.',
     icon: BarChart3,
-    gradient: 'bg-gradient-to-br from-purple-500 to-pink-500'
+    delay: 400
   },
   {
-    title: 'Interactive Heatmaps',
-    description: 'Visualize where synthetic users click, hover, and scroll to identify optimization opportunities.',
+    title: 'Pre-launch Interaction Data',
+    description: 'Visualize every click, scroll, and hover with interactive heatmaps before writing a single line of tracking code.',
     icon: MousePointer,
-    gradient: 'bg-gradient-to-br from-primary to-accent'
+    delay: 500
   },
   {
-    title: 'Privacy First',
-    description: 'No real user data required. Test and optimize without compromising user privacy.',
+    title: 'Zero-Knowledge Privacy',
+    description: 'Perform enterprise-grade user research without collecting a single real user biometric or PII.',
     icon: Shield,
-    gradient: 'bg-gradient-to-br from-slate-500 to-slate-700'
+    delay: 600
   }
 ]
 
 export function FeatureShowcase() {
   return (
-    <section className="py-20 px-6">
-      <div className="max-w-6xl mx-auto">
+    <section className="relative py-32 px-6">
+      {/* Subtle Background Glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-violet/5 blur-[160px] -z-10" />
+      
+      <div className="max-w-7xl mx-auto relative cursor-default">
         {/* Section header */}
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Everything you need to optimize UX
+        <div className="text-center mb-20 space-y-4">
+          <Badge variant="emerald" className="px-4 py-1.5 uppercase font-bold tracking-[0.1em] text-[10px]">Capabilities</Badge>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight premium-gradient-text leading-[1.1]">
+            Everything you need for <br/> <span className="violet-gradient-text italic">surgical precision optimization.</span>
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Powerful AI-driven tools to understand user behavior and improve your product
+          <p className="text-lg text-muted-foreground/80 max-w-2xl mx-auto leading-relaxed">
+            Stop guessing and start predicting. Use AI simulation to know exactly how your product will perform.
           </p>
         </div>
 
         {/* Features grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {features.map((feature, index) => (
             <FeatureCard
               key={index}
               title={feature.title}
               description={feature.description}
               icon={feature.icon}
-              gradient={feature.gradient}
+              delay={feature.delay}
             />
           ))}
         </div>
@@ -70,3 +74,5 @@ export function FeatureShowcase() {
     </section>
   )
 }
+
+import { Badge } from '@/components/ui/badge'

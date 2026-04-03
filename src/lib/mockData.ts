@@ -93,6 +93,32 @@ export const mockAnalysis: WebsiteAnalysis = {
         location: 'Austin',
         techSavviness: 95
       }
+    },
+    {
+      id: 'persona_4',
+      name: 'David Sterling',
+      role: 'Enterprise Executive',
+      goal: 'Verify security and compliance',
+      painPoints: [
+        'Missing SOC2 compliance badge',
+        'No enterprise pricing tier visible',
+        'Terms of Service hard to read'
+      ],
+      motivations: ['Compliance', 'Risk mitigation', 'Legal clarity'],
+      quote: 'I can\'t recommend this to our procurement team without seeing their security posture upfront.',
+      conversionLikelihood: 0.45,
+      behaviorPattern: {
+        browsingStyle: 'reader',
+        decisionSpeed: 'deliberate',
+        riskTolerance: 0.3,
+        priceSensitivity: 0.2
+      },
+      demographics: {
+        age: 52,
+        gender: 'male',
+        location: 'London',
+        techSavviness: 60
+      }
     }
   ],
   heatmapPoints: [
@@ -140,6 +166,33 @@ export const mockAnalysis: WebsiteAnalysis = {
       type: 'cyan',
       label: 'Footer',
       description: 'Users looking for contact/support info'
+    },
+    {
+      id: 'heatmap_6',
+      x: 15,
+      y: 12,
+      intensity: 0.6,
+      type: 'emerald',
+      label: 'Logo/Home',
+      description: 'Orientation point for lost navigators'
+    },
+    {
+      id: 'heatmap_7',
+      x: 65,
+      y: 85,
+      intensity: 0.8,
+      type: 'cyan',
+      label: 'Support Chat',
+      description: 'Conversion friction manifested as help requests'
+    },
+    {
+      id: 'heatmap_8',
+      x: 35,
+      y: 22,
+      intensity: 0.2,
+      type: 'emerald',
+      label: 'Blog Sidebar',
+      description: 'Low-intent exploration zone'
     }
   ],
   insights: [
@@ -149,7 +202,28 @@ export const mockAnalysis: WebsiteAnalysis = {
       description: 'Primary call-to-action blends with secondary actions, reducing click-through rate by estimated 23%',
       priority: 'high',
       category: 'design',
-      impact: 'high'
+      recommendation: 'Use contrasting colors and larger size for primary CTA. Consider adding a subtle shadow or glow effect to make it stand out.',
+      impact: {
+        level: 'high',
+        estimatedImprovement: '+23% CTR improvement',
+        confidence: 0.85
+      },
+      evidence: [
+        {
+          type: 'heatmap',
+          data: { x: 45, y: 35, intensity: 0.9, label: 'Primary CTA' },
+          description: 'Heatmap shows 90% intensity on CTA area'
+        },
+        {
+          type: 'metric',
+          data: { name: 'conversionRate', value: 0.45 },
+          description: 'Current conversion rate suggests room for improvement'
+        }
+      ],
+      implementationStatus: 'pending',
+      statusHistory: [{ status: 'pending', changedAt: new Date() }],
+      createdAt: new Date(),
+      updatedAt: new Date()
     },
     {
       id: 'insight_2',
@@ -157,7 +231,28 @@ export const mockAnalysis: WebsiteAnalysis = {
       description: 'Users encounter 7 navigation options before reaching pricing, causing 34% to abandon',
       priority: 'high',
       category: 'navigation',
-      impact: 'high'
+      recommendation: 'Reduce main navigation to 5 items or less. Use mega-menu for less critical links.',
+      impact: {
+        level: 'high',
+        estimatedImprovement: '+15% reduction in bounce rate',
+        confidence: 0.78
+      },
+      evidence: [
+        {
+          type: 'metric',
+          data: { name: 'dropOffRisk', value: 'high' },
+          description: 'Drop-off risk is high due to navigation complexity'
+        },
+        {
+          type: 'heatmap',
+          data: { x: 72, y: 28, intensity: 0.7, label: 'Navigation' },
+          description: 'Heatmap shows users exploring navigation extensively'
+        }
+      ],
+      implementationStatus: 'pending',
+      statusHistory: [{ status: 'pending', changedAt: new Date() }],
+      createdAt: new Date(),
+      updatedAt: new Date()
     },
     {
       id: 'insight_3',
@@ -165,7 +260,28 @@ export const mockAnalysis: WebsiteAnalysis = {
       description: 'Users must scroll past 3 sections before seeing pricing, increasing bounce rate',
       priority: 'medium',
       category: 'conversion',
-      impact: 'medium'
+      recommendation: 'Add pricing link to main navigation and consider sticky header with pricing CTA.',
+      impact: {
+        level: 'medium',
+        estimatedImprovement: '+18% pricing page visits',
+        confidence: 0.72
+      },
+      evidence: [
+        {
+          type: 'metric',
+          data: { name: 'engagement', value: 65 },
+          description: 'Current engagement score suggests pricing discoverability issues'
+        },
+        {
+          type: 'persona',
+          data: { personasAffected: 3, types: ['fast', 'scanner'] },
+          description: '3 personas report difficulty finding pricing information'
+        }
+      ],
+      implementationStatus: 'pending',
+      statusHistory: [{ status: 'pending', changedAt: new Date() }],
+      createdAt: new Date(),
+      updatedAt: new Date()
     },
     {
       id: 'insight_4',
@@ -173,7 +289,28 @@ export const mockAnalysis: WebsiteAnalysis = {
       description: 'Headline doesn\'t communicate core benefit, causing 28% to leave within 5 seconds',
       priority: 'medium',
       category: 'content',
-      impact: 'medium'
+      recommendation: 'Craft a clear, benefit-focused headline with supporting subheadline.',
+      impact: {
+        level: 'medium',
+        estimatedImprovement: '+12% engagement improvement',
+        confidence: 0.68
+      },
+      evidence: [
+        {
+          type: 'heatmap',
+          data: { x: 50, y: 25, intensity: 0.4, label: 'Hero' },
+          description: 'Low 40% intensity on hero section indicates disengagement'
+        },
+        {
+          type: 'metric',
+          data: { name: 'uxScore', value: 68 },
+          description: 'UX score indicates hero section could be more compelling'
+        }
+      ],
+      implementationStatus: 'pending',
+      statusHistory: [{ status: 'pending', changedAt: new Date() }],
+      createdAt: new Date(),
+      updatedAt: new Date()
     }
   ],
   frictionPoints: [

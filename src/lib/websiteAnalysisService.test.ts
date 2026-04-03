@@ -6,6 +6,11 @@ import {
   generateHeatmapFromAnalysis,
   generateInsightsFromAnalysis,
   performFullAnalysis,
+  updateInsightStatus,
+  filterInsightsByStatus,
+  filterInsightsByCategory,
+  getHighImpactInsights,
+  getEvidenceSummary,
   type WebsiteAnalysisResult
 } from './websiteAnalysisService'
 
@@ -448,7 +453,7 @@ describe('websiteAnalysisService', () => {
       }
     }
 
-    it('should generate insights with valid structure', () => {
+    it('should generate insights with valid enhanced structure', () => {
       const insights = generateInsightsFromAnalysis(mockAnalysis)
 
       expect(insights.length).toBeGreaterThan(0)
@@ -458,7 +463,19 @@ describe('websiteAnalysisService', () => {
         expect(insight.description).toBeDefined()
         expect(['high', 'medium', 'low']).toContain(insight.priority)
         expect(['navigation', 'content', 'conversion', 'design']).toContain(insight.category)
-        expect(['high', 'medium', 'low']).toContain(insight.impact)
+        expect(insight.recommendation).toBeDefined()
+        expect(insight.impact).toBeDefined()
+        expect(['high', 'medium', 'low']).toContain(insight.impact.level)
+        expect(insight.impact.estimatedImprovement).toBeDefined()
+        expect(insight.impact.confidence).toBeGreaterThanOrEqual(0)
+        expect(insight.impact.confidence).toBeLessThanOrEqual(1)
+        expect(insight.evidence).toBeInstanceOf(Array)
+        expect(insight.evidence.length).toBeGreaterThan(0)
+        expect(insight.implementationStatus).toBeDefined()
+        expect(['pending', 'in-progress', 'completed', 'dismissed']).toContain(insight.implementationStatus)
+        expect(insight.statusHistory).toBeInstanceOf(Array)
+        expect(insight.createdAt).toBeInstanceOf(Date)
+        expect(insight.updatedAt).toBeInstanceOf(Date)
       })
     })
 
@@ -468,6 +485,66 @@ describe('websiteAnalysisService', () => {
 
       expect(navInsight).toBeDefined()
       expect(navInsight?.description).toContain('5')
+    })
+
+    it('should include evidence for each insight', () => {
+      const insights = generateInsightsFromAnalysis(mockAnalysis)
+
+      insights.forEach(insight => {
+        expect(insight.evidence.length).toBeGreaterThanOrEqual(2)
+        insight.evidence.forEach(evidence => {
+          expect(['metric', 'heatmap', 'persona', 'simulation']).toContain(evidence.type)
+          expect(evidence.data).toBeDefined()
+          expect(typeof evidence.description).toBe('string')
+        })
+      })
+    })
+
+    it('should include impact estimates with confidence scores', () => {
+      const insights = generateInsightsFromAnalysis(mockAnalysis)
+
+      insights.forEach(insight => {
+        expect(insight.impact.confidence).toBeGreaterThanOrEqual(0.6)
+        expect(insight.impact.confidence).toBeLessThanOrEqual(0.9)
+        expect(insight.impact.estimatedImprovement).toMatch(/^\+\d+%/)
+      })
+    })
+
+    it('should include recommendations for each insight', () => {
+      const insights = generateInsightsFromAnalysis(mockAnalysis)
+
+      insights.forEach(insight => {
+        expect(insight.recommendation.length).toBeGreaterThan(20)
+        expect(insight.recommendation.length).toBeLessThanOrEqual(300)
+      })
+    })
+
+    it('should initialize with pending status and empty status history', () => {
+      const insights = generateInsightsFromAnalysis(mockAnalysis)
+
+      insights.forEach(insight => {
+        expect(insight.implementationStatus).toBe('pending')
+        expect(insight.statusHistory.length).toBe(1)
+        expect(insight.statusHistory[0].status).toBe('pending')
+      })
+    })
+
+    it('should accept optional metrics and personas for enhanced evidence', () => {
+      const mockMetrics = {
+        conversionRate: 0.45,
+        uxScore: 72,
+        dropOffRisk: 'medium' as const,
+        engagement: 65,
+        trend: { conversionRate: 5, uxScore: 3, engagement: -2 }
+      }
+
+      const insights = generateInsightsFromAnalysis(mockAnalysis, mockMetrics)
+
+      // Should still generate valid insights
+      expect(insights.length).toBeGreaterThan(0)
+      insights.forEach(insight => {
+        expect(insight.evidence.length).toBeGreaterThan(0)
+      })
     })
   })
 
@@ -494,6 +571,140 @@ describe('websiteAnalysisService', () => {
       const duration = Date.now() - startTime
 
       expect(duration).toBeLessThan(30000)
+    })
+  })
+
+  describe('insight management functions', () => {
+    const mockAnalysis: WebsiteAnalysisResult = {
+      url: 'https://example.com',
+      title: 'Example',
+      description: 'Test description',
+      structure: {
+        pages: [],
+        forms: [],
+        navigation: {
+          mainLinks: ['Home', 'Features', 'Pricing'],
+          hasSearch: true,
+          hasBreadcrumbs: false,
+          depth: 2
+        }
+      },
+      content: {
+        topics: ['Features', 'Pricing'],
+        targetAudience: {
+          primary: 'Product Managers',
+          secondary: [],
+          industry: 'SaaS',
+          companySize: 'startup',
+          technicalLevel: 'mixed'
+        },
+        language: 'en'
+      },
+      metadata: {
+        analyzedAt: new Date(),
+        processingTime: 1000
+      }
+    }
+
+    describe('updateInsightStatus', () => {
+      it('should update implementation status', () => {
+        const insights = generateInsightsFromAnalysis(mockAnalysis)
+        const updated = updateInsightStatus(insights[0], 'in-progress')
+
+        expect(updated.implementationStatus).toBe('in-progress')
+        expect(updated.statusHistory.length).toBe(2)
+        expect(updated.statusHistory[1].status).toBe('in-progress')
+      })
+
+      it('should add note when provided', () => {
+        const insights = generateInsightsFromAnalysis(mockAnalysis)
+        const updated = updateInsightStatus(insights[0], 'completed', 'Fixed CTA styling')
+
+        expect(updated.implementationStatus).toBe('completed')
+        expect(updated.statusHistory[1].note).toBe('Fixed CTA styling')
+      })
+
+      it('should update updatedAt timestamp', () => {
+        const insights = generateInsightsFromAnalysis(mockAnalysis)
+        const originalUpdatedAt = insights[0].updatedAt
+
+        // Small delay to ensure different timestamp
+        const updated = updateInsightStatus(insights[0], 'in-progress')
+
+        expect(updated.updatedAt.getTime()).toBeGreaterThanOrEqual(originalUpdatedAt.getTime())
+      })
+    })
+
+    describe('filterInsightsByStatus', () => {
+      it('should filter insights by pending status', () => {
+        const insights = generateInsightsFromAnalysis(mockAnalysis)
+        const pending = filterInsightsByStatus(insights, 'pending')
+
+        expect(pending.length).toBeGreaterThan(0)
+        pending.forEach(insight => {
+          expect(insight.implementationStatus).toBe('pending')
+        })
+      })
+
+      it('should return empty array when no matches', () => {
+        const insights = generateInsightsFromAnalysis(mockAnalysis)
+        const completed = filterInsightsByStatus(insights, 'completed')
+
+        expect(completed.length).toBe(0)
+      })
+    })
+
+    describe('filterInsightsByCategory', () => {
+      it('should filter insights by category', () => {
+        const insights = generateInsightsFromAnalysis(mockAnalysis)
+        const navigation = filterInsightsByCategory(insights, 'navigation')
+
+        expect(navigation.length).toBeGreaterThan(0)
+        navigation.forEach(insight => {
+          expect(insight.category).toBe('navigation')
+        })
+      })
+
+      it('should return empty array for non-existent category', () => {
+        const insights = generateInsightsFromAnalysis(mockAnalysis)
+        const design = filterInsightsByCategory(insights, 'design')
+
+        expect(design.length).toBeGreaterThan(0)
+      })
+    })
+
+    describe('getHighImpactInsights', () => {
+      it('should return only high impact insights', () => {
+        const insights = generateInsightsFromAnalysis(mockAnalysis)
+        const highImpact = getHighImpactInsights(insights)
+
+        expect(highImpact.length).toBeGreaterThan(0)
+        highImpact.forEach(insight => {
+          expect(insight.impact.level).toBe('high')
+        })
+      })
+    })
+
+    describe('getEvidenceSummary', () => {
+      it('should return evidence summary for an insight', () => {
+        const insights = generateInsightsFromAnalysis(mockAnalysis)
+        const summary = getEvidenceSummary(insights[0])
+
+        expect(summary.count).toBeGreaterThan(0)
+        expect(summary.type).toBeDefined()
+        expect(summary.descriptions).toBeInstanceOf(Array)
+        expect(summary.descriptions.length).toBe(summary.count)
+      })
+
+      it('should include all evidence descriptions', () => {
+        const insights = generateInsightsFromAnalysis(mockAnalysis)
+        const insight = insights[0]
+        const summary = getEvidenceSummary(insight)
+
+        insight.evidence.forEach((evidence, index) => {
+          expect(summary.descriptions[index]).toBe(evidence.description)
+        })
+      })
     })
   })
 })

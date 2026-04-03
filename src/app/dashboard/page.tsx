@@ -1,72 +1,95 @@
 "use client"
 
-import { useState, useEffect } from 'react'
-import { useAuth } from '@/contexts/AuthContext'
-import { ProtectedRoute } from '@/components/auth/ProtectedRoute'
-import { Navbar } from '@/components/ui/navbar'
+import { cn } from '@/lib/utils'
 import { 
-  Sidebar, 
   DashboardHeader, 
   MetricsRow, 
   HeatmapSection, 
   PersonasSection,
-  InsightsPanel,
+  AIInsightsPanel,
   FrictionPointsPanel,
-  AnalysisLoadingSkeleton
+  AnalysisLoadingSkeleton,
+  PersonaJourneyPanel,
+  PipelineDiagnostics
 } from '@/components/dashboard'
-import { DashboardProvider, useDashboard } from '@/contexts/DashboardContext'
+import { useDashboard } from '@/contexts/DashboardContext'
+import { ErrorBoundary } from '@/components/common/error-boundary'
 
-function DashboardContent() {
-  const { user } = useAuth()
-  const { analysis, isAnalyzing, selectedPersona, setSelectedPersona, analysisUrl } = useDashboard()
+export default function OverviewPage() {
+  const { 
+    analysis, 
+    isAnalyzing, 
+    selectedId,
+    selectedPersonaData,
+    getPersonaSimulation,
+    filteredMetrics,
+    filteredHeatmapPoints,
+    filteredInsights,
+    filteredFrictionPoints,
+    isSidebarCollapsed
+  } = useDashboard()
+
+  const simulationResult = selectedId ? getPersonaSimulation(selectedId) : null
 
   return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <Sidebar />
-      
-      <main className="pl-0 lg:pl-64 pt-14 min-h-screen">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-          <DashboardHeader 
-            title="Dashboard" 
-            subtitle="Analysis of"
-          />
+    <ErrorBoundary>
+      <div className="w-full px-4 sm:px-8 lg:px-12 py-10 max-w-[1600px] mx-auto animate-in fade-in duration-700">
+        <DashboardHeader 
+          title="SaaS Growth Analysis" 
+          subtitle="Interaction Cluster"
+          showPersonaBadge={!!selectedPersonaData}
+          personaName={selectedPersonaData?.name}
+        />
 
-          {isAnalyzing ? (
-            <AnalysisLoadingSkeleton />
-          ) : analysis ? (
-            <>
-              <MetricsRow metrics={analysis.metrics} />
-              
-              <div className="grid lg:grid-cols-3 gap-6 mt-8">
-                <div className="lg:col-span-2 space-y-6">
-                  <HeatmapSection points={analysis.heatmapPoints} />
-                  <PersonasSection 
-                    personas={analysis.personas}
-                    selectedId={selectedPersona}
-                    onSelect={setSelectedPersona}
-                  />
-                </div>
-
-                <div className="space-y-6">
-                  <InsightsPanel insights={analysis.insights} />
-                  <FrictionPointsPanel points={analysis.frictionPoints} />
-                </div>
+        {isAnalyzing ? (
+          <AnalysisLoadingSkeleton />
+        ) : analysis ? (
+          <div className="space-y-6">
+            {/* Metrics Row */}
+            <MetricsRow 
+              metrics={filteredMetrics || analysis.metrics} 
+              isPersonaFiltered={!!selectedPersonaData}
+              personaName={selectedPersonaData?.name}
+            />
+            
+            {/* Main Content Grid */}
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+              {/* Left Column - Heatmap and Personas (2 cols) */}
+              <div className="lg:col-span-2 space-y-6 text-foreground">
+                <HeatmapSection 
+                  points={filteredHeatmapPoints}
+                  highlightedPersona={selectedPersonaData?.name}
+                />
+                <PersonasSection 
+                  personas={analysis.personas}
+                  selectedId={selectedId}
+                  onSelect={(id) => {
+                     // The selection is now managed globally in DashboardContext
+                  }}
+                />
               </div>
-            </>
-          ) : null}
-        </div>
-      </main>
-    </div>
-  )
-}
 
-export default function DashboardPage() {
-  return (
-    <ProtectedRoute>
-      <DashboardProvider>
-        <DashboardContent />
-      </DashboardProvider>
-    </ProtectedRoute>
+              {/* Right Column - Insights and Journey (2 cols) */}
+              <div className="lg:col-span-2 space-y-6">
+                {selectedPersonaData && simulationResult ? (
+                  <PersonaJourneyPanel
+                    persona={selectedPersonaData}
+                    simulationResult={simulationResult}
+                  />
+                ) : null}
+                <AIInsightsPanel insights={filteredInsights} />
+                <FrictionPointsPanel points={filteredFrictionPoints} />
+              </div>
+            </div>
+            
+            <PipelineDiagnostics />
+          </div>
+        ) : (
+          <div className="flex items-center justify-center h-[50vh] text-muted-foreground opacity-50">
+             Enter a URL on the landing page to begin your analysis.
+          </div>
+        )}
+      </div>
+    </ErrorBoundary>
   )
 }

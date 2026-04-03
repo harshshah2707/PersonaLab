@@ -1,185 +1,172 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #0A0A0A;
-  --color-foreground: #FAFAFA;
-  --color-card: #111111;
-  --color-card-foreground: #FAFAFA;
-  --color-popover: #111111;
-  --color-popover-foreground: #FAFAFA;
-  --color-primary: #10B981;
-  --color-primary-foreground: #0A0A0A;
-  --color-secondary: #1A1A1A;
-  --color-secondary-foreground: #FAFAFA;
-  --color-muted: #1A1A1A;
-  --color-muted-foreground: #A3A3A3;
-  --color-accent: #06B6D4;
-  --color-accent-foreground: #0A0A0A;
-  --color-destructive: #EF4444;
-  --color-border: #1F1F1F;
-  --color-input: #1F1F1F;
-  --color-ring: #10B981;
+  /* Deep, sophisticated colors (Dark Mode Default) */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
   
-  --radius: 0.75rem;
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-cyan: hsl(185 90% 55%);
+  --color-emerald: hsl(155 85% 50%);
+  --color-violet: hsl(265 85% 65%);
+  
+  --color-destructive: hsl(0 84% 60%);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  
+  --radius: 1rem;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-outfit), var(--font-sans);
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+:root {
+  --background: hsl(0 0% 100%);
+  --foreground: hsl(220 20% 4%);
+  --card: hsl(0 0% 98%);
+  --card-foreground: hsl(220 20% 4%);
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(220 20% 4%);
+  --primary: hsl(160 84% 39%);
+  --primary-foreground: hsl(0 0% 100%);
+  --secondary: hsl(220 15% 95%);
+  --secondary-foreground: hsl(220 20% 4%);
+  --muted: hsl(220 15% 95%);
+  --muted-foreground: hsl(220 10% 40%);
+  --accent: hsl(265 85% 65%);
+  --accent-foreground: hsl(0 0% 100%);
+  --border: hsl(220 15% 90%);
+  --input: hsl(220 15% 90%);
+  --ring: hsl(160 84% 39%);
 }
 
-html {
-  font-family: system-ui, -apple-system, sans-serif;
-  background-color: #0A0A0A;
-  color: #FAFAFA;
+.dark {
+  --background: hsl(220 20% 4%);
+  --foreground: hsl(210 20% 98%);
+  --card: hsl(220 20% 7%);
+  --card-foreground: hsl(210 20% 98%);
+  --popover: hsl(220 20% 8%);
+  --popover-foreground: hsl(210 20% 98%);
+  --primary: hsl(160 84% 39%);
+  --primary-foreground: hsl(160 84% 5%);
+  --secondary: hsl(220 15% 15%);
+  --secondary-foreground: hsl(210 20% 98%);
+  --muted: hsl(220 15% 15%);
+  --muted-foreground: hsl(210 10% 65%);
+  --accent: hsl(265 85% 65%);
+  --accent-foreground: hsl(265 80% 5%);
+  --border: hsl(220 15% 15%);
+  --input: hsl(220 15% 15%);
+  --ring: hsl(160 84% 39%);
 }
 
-body {
-  min-height: 100vh;
-  background-color: #0A0A0A;
-}
-
-/* Custom component styles */
-.metric-card {
-  background-color: #111111;
-  border: 1px solid #1F1F1F;
-  border-radius: 0.75rem;
-  padding: 1.25rem;
-  transition: all 0.2s ease;
-}
-
-.metric-card:hover {
-  border-color: rgba(16, 185, 129, 0.3);
-  box-shadow: 0 0 20px rgba(16, 185, 129, 0.1);
-}
-
-.persona-card {
-  background-color: #111111;
-  border: 1px solid #1F1F1F;
-  border-radius: 0.75rem;
-  padding: 1rem;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.persona-card:hover {
-  border-color: rgba(16, 185, 129, 0.3);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
-.heatmap-dot {
-  position: absolute;
-  border-radius: 50%;
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.heatmap-dot.emerald {
-  background-color: #10B981;
-  box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
-}
-
-.heatmap-dot.cyan {
-  background-color: #06B6D4;
-  box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
-}
-
-.heatmap-dot:hover {
-  transform: scale(1.25);
-}
-
-.insight-item {
-  border-left: 2px solid rgba(6, 182, 212, 0.3);
-  padding-left: 1rem;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  transition: all 0.2s ease;
-}
-
-.insight-item:hover {
-  border-left-color: #06B6D4;
-  background-color: rgba(6, 182, 212, 0.05);
-}
-
-.metric-value {
-  font-size: 1.875rem;
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: -0.025em;
-}
-
-.metric-label {
-  font-size: 0.875rem;
-  color: #A3A3A3;
-  font-weight: 500;
-}
-
-.skeleton {
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-}
-
-/* Sidebar responsive styles */
-@media (max-width: 1024px) {
-  main {
-    padding-left: 0 !important;
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    word-wrap: break-word; /* Prevents text from leaking out of containers */
+    overflow-wrap: anywhere;
   }
   
-  aside {
-    transform: translateX(-100%);
-    transition: transform 0.3s ease;
+  body {
+    @apply bg-background text-foreground transition-colors duration-300;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    background-image: radial-gradient(at 0% 0%, var(--primary-glow) 0, transparent 50%),
+                      radial-gradient(at 100% 0%, var(--accent-glow) 0, transparent 50%);
   }
-  
-  aside.open {
-    transform: translateX(0);
+
+  :root {
+    --primary-glow: rgba(16, 185, 129, 0.05);
+    --accent-glow: rgba(139, 92, 246, 0.05);
+  }
+
+  .dark {
+    --primary-glow: rgba(16, 185, 129, 0.03);
+    --accent-glow: rgba(139, 92, 246, 0.03);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading tracking-tight;
   }
 }
 
-/* Mobile navigation toggle */
-.mobile-nav-toggle {
-  display: none;
+@layer components {
+  .glass-panel {
+    @apply bg-card/60 backdrop-blur-xl border border-border/50;
+  }
+
+  .glass-card {
+    @apply bg-card/40 backdrop-blur-md border border-border/50 hover:border-primary/30 transition-all duration-300;
+  }
+
+  .premium-gradient-text {
+    @apply bg-gradient-to-br from-foreground via-foreground to-foreground/40 bg-clip-text text-transparent;
+  }
+
+  .emerald-gradient-text {
+    @apply bg-gradient-to-r from-emerald to-cyan bg-clip-text text-transparent;
+  }
+
+  .violet-gradient-text {
+    @apply bg-gradient-to-r from-violet to-accent bg-clip-text text-transparent;
+  }
+
+  .metric-card {
+    @apply bg-card/60 backdrop-blur-md border border-border/50 hover:border-primary/20 transition-all duration-300 p-6 rounded-3xl relative overflow-hidden flex flex-col justify-between;
+  }
+
+  .persona-card {
+    @apply bg-card/40 backdrop-blur-md border border-border/50 hover:border-primary/20 transition-all duration-300 p-5 rounded-2xl cursor-pointer hover:shadow-xl hover:shadow-primary/5 active:scale-[0.98];
+  }
+
+  .heatmap-dot {
+    @apply absolute rounded-full transition-all duration-500 cursor-pointer;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .insight-item {
+    @apply bg-card/40 backdrop-blur-md border border-border/50 hover:border-border transition-all duration-300 p-5 rounded-2xl border-l-4 border-l-accent/50 hover:border-l-accent shadow-sm;
+  }
 }
 
-@media (max-width: 1024px) {
-  .mobile-nav-toggle {
-    display: flex;
-  }
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
 }
 
-/* Grid responsive adjustments */
-@media (max-width: 768px) {
-  .grid-cols-2 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  
-  .lg\:grid-cols-3 {
-    grid-template-columns: 1fr;
-  }
-  
-  .lg\:col-span-2 {
-    grid-column: span 1 / span 1;
-  }
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
 }
 
-/* Touch-friendly interactions for mobile */
-@media (hover: none) and (pointer: coarse) {
-  .persona-card:hover {
-    transform: none;
-    border-color: rgba(16, 185, 129, 0.3);
-  }
-  
-  .metric-card:hover {
-    border-color: rgba(16, 185, 129, 0.3);
-    box-shadow: 0 0 20px rgba(16, 185, 129, 0.1);
-  }
+::-webkit-scrollbar-thumb {
+  @apply bg-muted-foreground/20 rounded-full hover:bg-muted-foreground/40 transition-colors;
+}
+
+/* Animations */
+@keyframes shimmer {
+  from { background-position: -200% 0; }
+  to { background-position: 200% 0; }
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(128,128,128,0.05), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
 }

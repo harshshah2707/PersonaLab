@@ -1,11 +1,12 @@
 "use client"
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
+import { createClient } from '@/lib/client'
 import type { User, AuthState } from '@/types'
-import { simulateAuth } from '@/lib/mockData'
 
 interface AuthContextType extends AuthState {
-  login: (email: string) => Promise<void>
+  login: (email: string, password?: string) => Promise<void>
+  signUp: (email: string, password?: string) => Promise<void>
   logout: () => void
 }
 
@@ -18,45 +19,101 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     isAuthenticated: false
   })
 
+  // Initialize Supabase Client
+  const supabase = createClient()
+
   useEffect(() => {
-    // Check for existing session
-    const storedUser = localStorage.getItem('personaLab_user')
-    if (storedUser) {
-      try {
-        const user = JSON.parse(storedUser)
+    async function getInitialSession() {
+      const { data: { session } } = await supabase.auth.getSession()
+      
+      if (session?.user) {
         setState({
-          user,
+          user: {
+            id: session.user.id,
+            email: session.user.email || '',
+            name: session.user.user_metadata?.name || session.user.email?.split('@')[0] || 'User',
+            createdAt: new Date(session.user.created_at)
+          },
           isLoading: false,
           isAuthenticated: true
         })
-      } catch {
-        localStorage.removeItem('personaLab_user')
+      } else {
         setState(prev => ({ ...prev, isLoading: false }))
       }
-    } else {
-      setState(prev => ({ ...prev, isLoading: false }))
+    }
+
+    getInitialSession()
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        if (session?.user) {
+          setState({
+            user: {
+              id: session.user.id,
+              email: session.user.email || '',
+              name: session.user.user_metadata?.name || session.user.email?.split('@')[0] || 'User',
+              createdAt: new Date(session.user.created_at)
+            },
+            isLoading: false,
+            isAuthenticated: true
+          })
+        } else {
+          setState({
+            user: null,
+            isLoading: false,
+            isAuthenticated: false
+          })
+        }
+      }
+    )
+
+    return () => {
+      subscription.unsubscribe()
     }
   }, [])
 
-  const login = async (email: string) => {
+  // Login with Password or Magic Link
+  const login = async (email: string, password?: string) => {
     setState(prev => ({ ...prev, isLoading: true }))
     
     try {
-      const { user } = await simulateAuth(email)
-      localStorage.setItem('personaLab_user', JSON.stringify(user))
-      setState({
-        user,
-        isLoading: false,
-        isAuthenticated: true
-      })
+      if (password) {
+        const { error } = await supabase.auth.signInWithPassword({ email, password })
+        if (error) throw error
+      } else {
+        // Fallback to OTP/Magic Link if no password provided
+        const { error } = await supabase.auth.signInWithOtp({ email })
+        if (error) throw error
+      }
     } catch (error) {
       setState(prev => ({ ...prev, isLoading: false }))
       throw error
     }
   }
 
-  const logout = () => {
-    localStorage.removeItem('personaLab_user')
+  // Sign Up
+  const signUp = async (email: string, password?: string) => {
+    setState(prev => ({ ...prev, isLoading: true }))
+    try {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password: password || 'temp_password_123', // Demo fallback
+        options: {
+          data: {
+             name: email.split('@')[0]
+          }
+        }
+      })
+      if (error) throw error
+    } catch (error) {
+      setState(prev => ({ ...prev, isLoading: false }))
+      throw error
+    }
+  }
+
+  const logout = async () => {
+    await supabase.auth.signOut()
     setState({
       user: null,
       isLoading: false,
@@ -65,7 +122,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ ...state, login, logout }}>
+    <AuthContext.Provider value={{ ...state, login, signUp, logout }}>
       {children}
     </AuthContext.Provider>
   )

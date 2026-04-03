@@ -1,6 +1,7 @@
 import type {
   PersonaProfile,
   WebsiteAnalysis,
+  WebsiteAnalysisResult,
   SimulationResult,
   Interaction,
   UserState,
@@ -396,13 +397,31 @@ function calculateEngagementScore(interactions: Interaction[], userState: UserSt
 }
 
 // Convert website analysis to page structure
-function convertToWebsitePage(analysis: WebsiteAnalysis, pageUrl: string): WebsitePage {
-  const structure = analysis.structure
-  const page = structure?.pages.find(p => p.url === pageUrl) || structure?.pages[0]
-  
-  if (!structure || !page) {
+function convertToWebsitePage(analysis: WebsiteAnalysis | WebsiteAnalysisResult, pageUrl: string): WebsitePage {
+  // Check if it's the extended analysis result (test mock)
+  const structure = 'structure' in analysis ? analysis.structure : null
+  if (structure && 'pages' in structure && structure.pages[0] && 'loadTime' in structure.pages[0]) {
+    const result = analysis as WebsiteAnalysisResult
+    const page = result.structure.pages.find(p => p.url === pageUrl) || result.structure.pages[0]
+    
     return {
-      url: analysis.url,
+      url: page.url,
+      title: page.title,
+      elements: page.elements,
+      ctaElements: ['Get Started', 'Sign Up', 'Start Free Trial'],
+      formElements: result.structure.forms.flatMap(f => f.fields.map(field => `${f.type} - ${field}`)),
+      navigationElements: result.structure.navigation.mainLinks
+    }
+  }
+  
+  // Standard WebsiteAnalysis
+  const stdAnalysis = analysis as WebsiteAnalysis
+  const stdStructure = stdAnalysis.structure
+  const page = stdStructure?.pages.find(p => p.url === pageUrl) || stdStructure?.pages[0]
+  
+  if (!stdStructure || !page) {
+    return {
+      url: stdAnalysis.url,
       title: 'Page',
       elements: ['Hero', 'Navigation', 'Content', 'CTA'],
       ctaElements: ['Get Started'],
@@ -424,7 +443,7 @@ function convertToWebsitePage(analysis: WebsiteAnalysis, pageUrl: string): Websi
 // Main simulation function
 export function simulateUserBehavior(
   persona: PersonaProfile,
-  analysis: WebsiteAnalysis,
+  analysis: WebsiteAnalysis | WebsiteAnalysisResult,
   config: Partial<SimulationConfig> = {}
 ): SimulationResult {
   const finalConfig = { ...DEFAULT_CONFIG, ...config }
@@ -489,7 +508,7 @@ export function simulateUserBehavior(
 // Run simulations for multiple personas
 export function runBehaviorSimulations(
   personas: PersonaProfile[],
-  analysis: WebsiteAnalysis,
+  analysis: WebsiteAnalysis | WebsiteAnalysisResult,
   config?: Partial<SimulationConfig>
 ): SimulationResult[] {
   return personas.map(persona => simulateUserBehavior(persona, analysis, config))
