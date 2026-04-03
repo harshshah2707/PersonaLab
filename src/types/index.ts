@@ -8,6 +8,15 @@ export interface User {
   createdAt: Date
 }
 
+// URL Validation types
+export type URLValidationErrorType = 'format' | 'protocol' | 'blocked' | 'accessible'
+
+export interface URLValidationResult {
+  isValid: boolean
+  error?: string
+  errorType?: URLValidationErrorType
+}
+
 export interface AnalysisSession {
   id: string
   url: string
