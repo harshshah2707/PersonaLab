@@ -140,12 +140,15 @@ export interface InsightStatusHistory {
   note?: string
 }
 
+export type InsightPriority = 'high' | 'medium' | 'low'
+export type InsightCategory = 'navigation' | 'content' | 'conversion' | 'design'
+
 export interface AIInsight {
   id: string
   title: string
   description: string
-  priority: 'high' | 'medium' | 'low'
-  category: 'navigation' | 'content' | 'conversion' | 'design'
+  priority: InsightPriority
+  category: InsightCategory
   recommendation: string
   impact: InsightImpact
   evidence: InsightEvidence[]
