@@ -30,25 +30,32 @@ export async function runBrowserAgent(req: BrowserAgentRequest): Promise<Browser
     page = await context.newPage()
 
     // 1. Navigate & Wait
+    console.log(`[Browser-Agent] NAVIGATING to ${url}...`)
     const response = await page.goto(url, { waitUntil: 'load', timeout: 30000 })
     if (!response || !response.ok()) {
       throw new Error(`Navigation failed with status: ${response?.status()}`)
     }
     
     // Stabilize UI
+    console.log('[Browser-Agent] STABILIZING layout for high-res capture...')
     await page.waitForTimeout(2000)
 
     // 2. Capture Screenshot (Standard and Uploaded)
+    console.log('[Browser-Agent] CAPTURING institutional viewport...')
     const { buffer, url: screenshot_url } = await captureFullPageScreenshot(page, project_id)
 
     // 3. User Simulation (Trace generation)
+    console.log('[Browser-Agent] SIMULATING behavioral paths...')
     const interaction_trace = await simulateUserBehavior(page)
 
     // 4. Extract Interactive Nodes
+    console.log('[Browser-Agent] EXTRACTING neural node coordinates...')
     const clickable_elements = await extractClickableElements(page)
 
     // 5. Build Metadata
     const page_title = await page.title()
+
+    console.log('[Browser-Agent] SESSION RESOLVED successfully.')
 
     return {
       screenshot_url,

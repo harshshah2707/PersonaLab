@@ -88,7 +88,7 @@ export function HeatmapSection({ points, screenshotUrl, highlightedPersona }: He
             {/* Map Area - Editorial Precise Viewport */}
             <div 
               className={cn(
-                "relative bg-cream/10 border border-sand rounded-[2rem] overflow-hidden shadow-inner group/map aspect-[3/2] flex-1 min-h-[300px]",
+                "relative bg-cream/10 border border-sand rounded-[2rem] overflow-hidden shadow-inner group/map aspect-[16/10] flex-1 min-h-[300px]",
                 highlightedPersona && "ring-4 ring-emerald-500/5"
               )}
             >
