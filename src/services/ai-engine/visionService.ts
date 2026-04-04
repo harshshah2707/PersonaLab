@@ -56,12 +56,16 @@ export async function analyzeWithVision(screenshotBuffer: Buffer | null): Promis
  * Returns a high-quality analysis that mimics real user behavior.
  */
 export function generateMockAnalysis(url: string = 'https://example.com'): AnalysisResponse {
-  const host = new URL(url).hostname
+  let host = 'Target Node'
+  try {
+     host = new URL(url).hostname
+  } catch (e) {}
   
   return {
     conversion_rate: 4.2 + (Math.random() * 2),
     ux_score: 75 + (Math.random() * 15),
     engagement_score: 60 + (Math.random() * 20),
+    screenshot_url: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1600&h=1200', // 🖼️ PREMIUM FALLBACK SCREENSHOT 🏁🌟
     personas: [
       {
         name: 'Sarah Chen',

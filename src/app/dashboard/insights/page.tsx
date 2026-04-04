@@ -18,10 +18,9 @@ export default function InsightsPage() {
   } = useDashboard()
 
   return (
-    <div className="w-full px-4 sm:px-8 lg:px-12 py-10 max-w-[1600px] mx-auto animate-in fade-in duration-700">
+    <div className="layout-container py-12 animate-in fade-in duration-1000">
       <DashboardHeader 
         title="Strategic Insights" 
-        subtitle="AI-Powered Optimization Recommendations"
         showPersonaBadge={!!selectedPersonaData}
         personaName={selectedPersonaData?.name}
       />
@@ -29,18 +28,28 @@ export default function InsightsPage() {
       {isAnalyzing ? (
         <AnalysisLoadingSkeleton />
       ) : analysis ? (
-        <div className="space-y-8">
+        <div className="space-y-12">
             <MetricsRow 
                 metrics={filteredMetrics || analysis.metrics} 
                 isPersonaFiltered={!!selectedPersonaData}
                 personaName={selectedPersonaData?.name}
             />
             
-            <div className="grid grid-cols-1 lg:grid-cols-1 gap-8">
+            <div className="grid grid-cols-1 gap-12">
                 <AIInsightsPanel insights={filteredInsights} />
             </div>
         </div>
-      ) : null}
+      ) : (
+        <div className="flex flex-col items-center justify-center h-[50vh] text-center space-y-6">
+           <div className="w-16 h-16 rounded-[2rem] bg-coffee/5 border border-sand flex items-center justify-center text-coffee">
+              <span className="text-2xl">💡</span>
+           </div>
+           <div className="space-y-2">
+              <h2 className="text-2xl font-bold tracking-tight">No Insights Available</h2>
+              <p className="text-muted-foreground max-w-sm">Enter a URL on the home page to start your neural audit and generate strategic insights.</p>
+           </div>
+        </div>
+      )}
     </div>
   )
 }

@@ -5,9 +5,8 @@ import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Progress } from '@/components/ui/progress'
 import { URLInput } from '@/components/landing/URLInput'
-import { Zap, Users, BarChart3, Sparkles, AlertCircle, RefreshCw, CheckCircle2, Loader2, MousePointer2 } from 'lucide-react'
+import { Zap, Users, BarChart3, Sparkles, AlertCircle, RefreshCw, CheckCircle2, Loader2, Target, Fingerprint, MousePointer2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 type AnalysisState = 'idle' | 'validating' | 'analyzing' | 'success' | 'error'
@@ -19,11 +18,11 @@ interface AnalysisError {
 }
 
 const ANALYSIS_STAGES = [
-  { id: 'validate', label: 'Validating URL', duration: 500 },
-  { id: 'scrape', label: 'Analyzing website structure', duration: 2000 },
-  { id: 'personas', label: 'Generating AI personas', duration: 3000 },
-  { id: 'simulate', label: 'Running behavior simulations', duration: 4000 },
-  { id: 'insights', label: 'Compiling insights', duration: 1500 },
+  { id: 'validate', label: 'Validating Logic', duration: 500 },
+  { id: 'scrape', label: 'Extracting Dom Structure', duration: 2000 },
+  { id: 'personas', label: 'Seeding AI Entities', duration: 3000 },
+  { id: 'simulate', label: 'Neural Path Simulation', duration: 4000 },
+  { id: 'insights', label: 'Strategic Synthesis', duration: 1500 },
 ]
 
 const MAX_ANALYSIS_TIME = 30000 // 30 seconds
@@ -86,8 +85,8 @@ export function HeroSection() {
       
       setError({
         message: isTimeout 
-          ? 'Analysis is taking longer than expected. Please try again.'
-          : 'Unable to analyze this website. Please check the URL and try again.',
+          ? 'Extraction timed out. The system requires high-fidelity access.'
+          : 'Unable to audit this node. Please verify access and try again.',
         canRetry: true,
         errorType: isTimeout ? 'timeout' : 'unknown'
       })
@@ -118,133 +117,129 @@ export function HeroSection() {
   }, [])
 
   const isLoading = analysisState === 'validating' || analysisState === 'analyzing'
-  const isSuccess = analysisState === 'success'
-  const isError = analysisState === 'error'
 
   return (
-    <section className="relative pt-20 pb-32 overflow-hidden">
-      {/* Background Orbs */}
-      <div className="absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute -top-24 -left-24 w-96 h-96 bg-emerald/10 rounded-full blur-[120px] animate-pulse" />
-        <div className="absolute top-1/2 -right-24 w-96 h-96 bg-violet/10 rounded-full blur-[120px]" />
-        <div className="absolute bottom-0 left-1/3 w-[500px] h-96 bg-cyan/5 rounded-full blur-[120px]" />
+    <section className="relative pt-24 pb-12 overflow-hidden bg-background">
+      {/* Subtle Studio Glows */}
+      <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div className="absolute -top-48 -left-24 w-[600px] h-[600px] bg-coffee/5 rounded-full blur-[120px] opacity-30" />
+        <div className="absolute bottom-0 right-0 w-[700px] h-[700px] bg-terracotta/5 rounded-full blur-[140px] opacity-15" />
       </div>
 
-      <div className="container mx-auto px-6 relative">
+      <div className="layout-container relative">
         <div className="max-w-4xl mx-auto text-center space-y-8">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald/10 border border-emerald/20 text-emerald text-xs font-medium animate-in fade-in slide-in-from-bottom-2 duration-700">
-            <Zap className="w-3.5 h-3.5 fill-current" />
-            <span>AI-Powered User Simulation Engine v2.0</span>
+          {/* Institutional Badge */}
+          <div className="inline-flex items-center gap-3 px-5 py-2 rounded-full bg-white border border-sand text-coffee text-[10px] font-black uppercase tracking-[0.3em] shadow-sm">
+            <div className="w-1.5 h-1.5 rounded-full bg-terracotta animate-pulse" />
+            <span>Neural Simulation v4.0</span>
           </div>
           
-          {/* Headline */}
-          <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150">
-            <h1 className="text-5xl md:text-7xl font-bold tracking-tight">
-              <span className="premium-gradient-text">Capture conversions</span>
-              <br />
-              <span className="emerald-gradient-text">before you launch.</span>
+          <div className="space-y-8">
+            <h1 className="text-4xl md:text-5xl lg:text-7xl font-bold tracking-tighter leading-[0.95] text-foreground max-w-[15ch] mx-auto animate-in fade-in slide-in-from-bottom-8 duration-1000">
+               Simulate <span className="text-accent italic font-normal">human</span> intuition.
             </h1>
-            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Don&apos;t wait for real users to find friction. Our AI personas simulate 
-              authentic behavior patterns to identify drop-offs and optimize your UX in seconds.
+            <p className="text-base md:text-lg text-coffee/40 max-w-xl mx-auto leading-relaxed animate-in fade-in slide-in-from-bottom-6 duration-1000 delay-200">
+              An analytical studio for elite product teams. Observe customer journeys <br className="hidden md:block"/> with behavioral precision.
             </p>
           </div>
           
-          {/* Action Area */}
-          <div className="relative max-w-2xl mx-auto pt-4 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-300">
+          {/* Action Core */}
+          <div className="relative max-w-2xl mx-auto pt-6 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-400">
             {analysisState === 'idle' ? (
               <URLInput
                 onSubmit={handleURLSubmit}
                 isLoading={isLoading}
-                placeholder="Enter your product URL (e.g., https://acme.com)"
-                className="shadow-2xl shadow-primary/10"
+                placeholder="https://your-product-studio.com"
+                className="shadow-xl shadow-coffee/5"
               />
             ) : (
               <div className={cn(
-                "glass-panel p-8 rounded-3xl border-white/10 shadow-2xl relative overflow-hidden",
-                isError && "border-destructive/30"
+                "bg-white p-8 rounded-3xl border border-sand shadow-2xl relative overflow-hidden",
+                analysisState === 'error' && "border-terracotta/20 bg-terracotta/5"
               )}>
                 {isLoading && (
-                  <div className="space-y-6">
+                  <div className="space-y-8">
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="p-2 rounded-lg bg-emerald/10">
-                          <Loader2 className="w-5 h-5 animate-spin text-emerald" />
+                      <div className="flex items-start gap-4">
+                        <div className="p-3 rounded-2xl bg-coffee text-white shadow-lg">
+                          <Loader2 className="w-5 h-5 animate-spin" />
                         </div>
-                        <div className="text-left">
-                          <p className="text-sm font-semibold text-foreground">
+                        <div className="text-left space-y-1">
+                          <p className="text-xs font-black uppercase tracking-[0.2em] text-coffee">
                             {ANALYSIS_STAGES[currentStage]?.label}
                           </p>
-                          <p className="text-xs text-muted-foreground">This may take a moment...</p>
+                          <p className="text-[10px] text-coffee/30 font-medium italic">Neural engine synchronizing...</p>
                         </div>
                       </div>
-                      <span className="text-2xl font-bold emerald-gradient-text">{Math.round(progress)}%</span>
+                      <span className="text-3xl font-black tabular-nums tracking-tighter text-coffee/20">{Math.round(progress)}%</span>
                     </div>
                     
-                    <div className="relative h-2 w-full bg-white/5 rounded-full overflow-hidden">
+                    {/* Architectural Progress Indicator */}
+                    <div className="relative h-1.5 w-full bg-cream rounded-full overflow-hidden">
                       <div 
-                        className="absolute h-full bg-gradient-to-r from-emerald to-cyan transition-all duration-500 rounded-full"
+                        className="absolute h-full bg-coffee transition-all duration-500 rounded-full"
                         style={{ width: `${progress}%` }}
                       >
-                        <div className="absolute inset-0 animate-shimmer" />
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-shimmer" />
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4 pt-2">
+                    <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 pt-2">
                        {ANALYSIS_STAGES.map((stage, i) => (
                          <div 
                            key={stage.id} 
                            className={cn(
-                             "flex items-center gap-2 text-[10px] uppercase tracking-wider font-bold transition-colors",
-                             i <= currentStage ? "text-emerald" : "text-muted-foreground/40"
+                             "flex items-center gap-2 text-[8px] uppercase tracking-widest font-black transition-all",
+                             i <= currentStage ? "text-coffee" : "text-coffee/10"
                            )}
                          >
-                           {i < currentStage ? <CheckCircle2 className="w-3 h-3" /> : <div className={cn("w-1.5 h-1.5 rounded-full", i === currentStage ? "bg-emerald animate-pulse" : "bg-current")} />}
-                           {stage.id}
+                           {i < currentStage ? <CheckCircle2 className="w-3.5 h-3.5 text-forest" /> : <div className={cn("w-1 h-1 rounded-full", i === currentStage ? "bg-terracotta animate-pulse" : "bg-current")} />}
+                           <span className="truncate">{stage.id}</span>
                          </div>
                        ))}
                     </div>
                   </div>
                 )}
 
-                {isSuccess && (
-                   <div className="py-4 space-y-4 text-center animate-in zoom-in-95 duration-500">
-                     <div className="w-16 h-16 bg-emerald/20 rounded-full flex items-center justify-center mx-auto mb-4 border border-emerald/30">
-                       <CheckCircle2 className="w-8 h-8 text-emerald" />
+                {analysisState === 'success' && (
+                   <div className="py-8 space-y-4 text-center animate-in zoom-in-95">
+                     <div className="w-16 h-16 bg-forest/10 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-forest/20 shadow-xl">
+                       <CheckCircle2 className="w-8 h-8 text-forest" />
                      </div>
-                     <h3 className="text-xl font-bold">Analysis Complete!</h3>
-                     <p className="text-muted-foreground">We&apos;ve mapped your user journeys. Redirecting to dashboard...</p>
+                     <div className="space-y-1">
+                        <h3 className="text-xl font-black text-coffee tracking-tighter">Diagnostic Complete</h3>
+                        <p className="text-xs text-coffee/40 font-medium max-w-xs mx-auto leading-relaxed">Neural paths verified. Strategic cockpit loading...</p>
+                     </div>
                    </div>
-                )}
+                 )}
 
-                {isError && error && (
-                  <div className="text-left space-y-4 animate-in fade-in duration-300">
+                {analysisState === 'error' && error && (
+                  <div className="text-left space-y-6 animate-in fade-in">
                     <div className="flex items-start gap-4">
-                      <div className="p-2 rounded-lg bg-destructive/10">
-                        <AlertCircle className="w-6 h-6 text-destructive" />
+                      <div className="p-3 rounded-2xl bg-terracotta text-white shadow-xl">
+                        <AlertCircle className="w-5 h-5" />
                       </div>
                       <div className="space-y-1">
-                        <p className="font-bold text-foreground">Analysis Preempted</p>
-                        <p className="text-sm text-muted-foreground">{error.message}</p>
+                        <p className="text-xs font-black uppercase tracking-[0.2em] text-coffee">Neural Interruption</p>
+                        <p className="text-xs text-coffee/50 leading-relaxed font-bold italic">{error.message}</p>
                       </div>
                     </div>
-                    <div className="flex gap-3 pt-2">
+                    <div className="flex gap-4 pt-4 border-t border-terracotta/10">
                       {error.canRetry && (
                         <Button
                           onClick={handleRetry}
                           size="sm"
-                          className="bg-foreground text-background hover:bg-foreground/90 font-bold"
+                          className="bg-coffee text-white font-black rounded-xl px-6 shadow-xl"
                         >
-                          <RefreshCw className="w-4 h-4 mr-2" />
-                          Retry Analysis
+                          <RefreshCw className="w-3 h-3 mr-2" />
+                          Retry Audit
                         </Button>
                       )}
                       <Button
                         variant="ghost"
                         onClick={handleCancel}
                         size="sm"
-                        className="font-bold"
+                        className="font-black text-[9px] uppercase tracking-widest text-coffee/30"
                       >
                         Cancel
                       </Button>
@@ -255,26 +250,23 @@ export function HeroSection() {
             )}
           </div>
 
-          {/* Trust indicators */}
-          <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-6 pt-12 text-sm font-medium text-muted-foreground/60 animate-in fade-in delay-500">
-            <div className="flex items-center gap-2 group cursor-default transition-colors hover:text-emerald">
-              <Users className="w-4 h-4 transition-colors group-hover:text-emerald" />
-              <span>Multi-Persona Simulation</span>
+          {/* Institutional Trust Cluster */}
+          <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-6 pt-16 animate-in fade-in duration-1000">
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-xl bg-white border border-sand">
+                 <Users className="w-4 h-4 text-coffee/20" />
+              </div>
+              <span className="text-[9px] font-black uppercase tracking-[0.3em] text-coffee/20">Neural Entities</span>
             </div>
-            <div className="flex items-center gap-2 group cursor-default transition-colors hover:text-cyan">
-              <BarChart3 className="w-4 h-4 transition-colors group-hover:text-cyan" />
-              <span>Predictive Conversion Heatmaps</span>
-            </div>
-            <div className="flex items-center gap-2 group cursor-default transition-colors hover:text-violet">
-              <Sparkles className="w-4 h-4 transition-colors group-hover:text-violet" />
-              <span>AI-Driven UX Optimization</span>
+            <div className="flex items-center gap-3">
+              <div className="p-2 rounded-xl bg-white border border-sand">
+                 <MousePointer2 className="w-4 h-4 text-coffee/20" />
+              </div>
+              <span className="text-[9px] font-black uppercase tracking-[0.3em] text-coffee/20">Behavioral Maps</span>
             </div>
           </div>
         </div>
       </div>
-
-      {/* Decorative Elements */}
-      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
     </section>
   )
 }

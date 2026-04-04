@@ -1,172 +1,105 @@
 @import "tailwindcss";
 
 @theme {
-  /* Deep, sophisticated colors (Dark Mode Default) */
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
+  /* ☕ PersonaLab: Light Café Elite Palette */
+  --color-background: oklch(0.98 0.01 77); /* #FAF7F2 */
+  --color-foreground: oklch(0.42 0.04 63); /* #6B4F3B */
+  --color-card: oklch(1 0 0);
+  --color-card-foreground: oklch(0.42 0.04 63);
+  --color-popover: oklch(1 0 0);
+  --color-popover-foreground: oklch(0.42 0.04 63);
+  --color-primary: oklch(0.42 0.04 63);
+  --color-primary-foreground: oklch(0.98 0.01 77);
+  --color-secondary: oklch(0.95 0.01 77); /* #F4EFE8 */
+  --color-secondary-foreground: oklch(0.42 0.04 63);
+  --color-muted: oklch(0.91 0.01 77); /* #E8E2D9 */
+  --color-muted-foreground: oklch(0.6 0.02 63);
+  --color-accent: oklch(0.65 0.15 45); /* #D27C5C */
+  --color-accent-foreground: oklch(0.98 0.01 77);
+  --color-destructive: oklch(0.6 0.25 25);
+  --color-destructive-foreground: oklch(0.98 0 0);
+  --color-border: oklch(0.91 0.01 77);
+  --color-input: oklch(0.91 0.01 77);
+  --color-ring: oklch(0.42 0.04 63);
 
-  --color-cyan: hsl(185 90% 55%);
-  --color-emerald: hsl(155 85% 50%);
-  --color-violet: hsl(265 85% 65%);
-  
-  --color-destructive: hsl(0 84% 60%);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  
-  --radius: 1rem;
+  /* Semantic Aliases for High-Fidelity Poise */
+  --color-coffee: oklch(0.42 0.04 63);
+  --color-terracotta: oklch(0.65 0.15 45);
+  --color-sand: oklch(0.91 0.01 77);
+  --color-oat: oklch(0.98 0.01 77);
+  --color-cream: oklch(1 0 0);
+  --color-forest: oklch(0.5 0.1 145); /* #4A6741 */
 
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-heading: var(--font-outfit), var(--font-sans);
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-3xl: 2.5rem;
 }
 
-:root {
-  --background: hsl(0 0% 100%);
-  --foreground: hsl(220 20% 4%);
-  --card: hsl(0 0% 98%);
-  --card-foreground: hsl(220 20% 4%);
-  --popover: hsl(0 0% 100%);
-  --popover-foreground: hsl(220 20% 4%);
-  --primary: hsl(160 84% 39%);
-  --primary-foreground: hsl(0 0% 100%);
-  --secondary: hsl(220 15% 95%);
-  --secondary-foreground: hsl(220 20% 4%);
-  --muted: hsl(220 15% 95%);
-  --muted-foreground: hsl(220 10% 40%);
-  --accent: hsl(265 85% 65%);
-  --accent-foreground: hsl(0 0% 100%);
-  --border: hsl(220 15% 90%);
-  --input: hsl(220 15% 90%);
-  --ring: hsl(160 84% 39%);
-}
-
+/* 🌑 Dark Roast Studio Palette Overrides */
 .dark {
-  --background: hsl(220 20% 4%);
-  --foreground: hsl(210 20% 98%);
-  --card: hsl(220 20% 7%);
-  --card-foreground: hsl(210 20% 98%);
-  --popover: hsl(220 20% 8%);
-  --popover-foreground: hsl(210 20% 98%);
-  --primary: hsl(160 84% 39%);
-  --primary-foreground: hsl(160 84% 5%);
-  --secondary: hsl(220 15% 15%);
-  --secondary-foreground: hsl(210 20% 98%);
-  --muted: hsl(220 15% 15%);
-  --muted-foreground: hsl(210 10% 65%);
-  --accent: hsl(265 85% 65%);
-  --accent-foreground: hsl(265 80% 5%);
-  --border: hsl(220 15% 15%);
-  --input: hsl(220 15% 15%);
-  --ring: hsl(160 84% 39%);
+  --color-background: oklch(0.2 0.01 60); /* #12100E approximation */
+  --color-foreground: oklch(0.95 0.01 77); /* #EDE6D9 */
+  --color-card: oklch(0.25 0.01 60); /* #1A1816 */
+  --color-card-foreground: oklch(0.95 0.01 77);
+  --color-popover: oklch(0.25 0.01 60);
+  --color-popover-foreground: oklch(0.95 0.01 77);
+  --color-secondary: oklch(0.3 0.01 60); /* #221F1D */
+  --color-secondary-foreground: oklch(0.95 0.01 77);
+  --color-muted: oklch(0.35 0.01 60); /* #2E2A26 */
+  --color-muted-foreground: oklch(0.6 0.02 60);
+  --color-border: oklch(0.35 0.01 60);
+  --color-input: oklch(0.35 0.01 60);
+  --color-accent: oklch(0.65 0.15 45); /* #D27C5C remains vibrant */
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-    word-wrap: break-word; /* Prevents text from leaking out of containers */
-    overflow-wrap: anywhere;
+  *, ::after, ::before {
+    @apply border-border;
   }
-  
   body {
-    @apply bg-background text-foreground transition-colors duration-300;
-    font-feature-settings: "rlig" 1, "calt" 1;
-    background-image: radial-gradient(at 0% 0%, var(--primary-glow) 0, transparent 50%),
-                      radial-gradient(at 100% 0%, var(--accent-glow) 0, transparent 50%);
-  }
-
-  :root {
-    --primary-glow: rgba(16, 185, 129, 0.05);
-    --accent-glow: rgba(139, 92, 246, 0.05);
-  }
-
-  .dark {
-    --primary-glow: rgba(16, 185, 129, 0.03);
-    --accent-glow: rgba(139, 92, 246, 0.03);
-  }
-
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-heading tracking-tight;
+    @apply bg-background text-foreground transition-all duration-500 font-sans tracking-tight antialiased;
   }
 }
 
 @layer components {
+  /* High-Fidelity Paper Architecture */
+  .paper-card {
+    @apply bg-card border border-border shadow-[0_4px_24px_rgba(107,79,59,0.06)] rounded-3xl p-8 transition-all duration-700 dark:shadow-[0_4px_24px_rgba(0,0,0,0.4)];
+  }
+
+  .paper-panel {
+    @apply bg-secondary/40 border border-border rounded-2xl p-6 transition-all duration-700 dark:bg-card/40;
+  }
+
   .glass-panel {
-    @apply bg-card/60 backdrop-blur-xl border border-border/50;
+    @apply bg-card/60 backdrop-blur-xl border border-border/10 rounded-2xl transition-all duration-500;
   }
 
-  .glass-card {
-    @apply bg-card/40 backdrop-blur-md border border-border/50 hover:border-primary/30 transition-all duration-300;
-  }
-
-  .premium-gradient-text {
-    @apply bg-gradient-to-br from-foreground via-foreground to-foreground/40 bg-clip-text text-transparent;
-  }
-
-  .emerald-gradient-text {
-    @apply bg-gradient-to-r from-emerald to-cyan bg-clip-text text-transparent;
-  }
-
-  .violet-gradient-text {
-    @apply bg-gradient-to-r from-violet to-accent bg-clip-text text-transparent;
-  }
-
-  .metric-card {
-    @apply bg-card/60 backdrop-blur-md border border-border/50 hover:border-primary/20 transition-all duration-300 p-6 rounded-3xl relative overflow-hidden flex flex-col justify-between;
-  }
-
-  .persona-card {
-    @apply bg-card/40 backdrop-blur-md border border-border/50 hover:border-primary/20 transition-all duration-300 p-5 rounded-2xl cursor-pointer hover:shadow-xl hover:shadow-primary/5 active:scale-[0.98];
-  }
-
-  .heatmap-dot {
-    @apply absolute rounded-full transition-all duration-500 cursor-pointer;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-  }
-
-  .insight-item {
-    @apply bg-card/40 backdrop-blur-md border border-border/50 hover:border-border transition-all duration-300 p-5 rounded-2xl border-l-4 border-l-accent/50 hover:border-l-accent shadow-sm;
+  /* Institutional Typography Spacing */
+  .layout-container {
+    @apply max-w-7xl mx-auto px-6 sm:px-10 lg:px-16;
   }
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-}
-
-::-webkit-scrollbar-track {
-  @apply bg-transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  @apply bg-muted-foreground/20 rounded-full hover:bg-muted-foreground/40 transition-colors;
-}
-
-/* Animations */
+/* Custom Laboratory Animations */
 @keyframes shimmer {
-  from { background-position: -200% 0; }
-  to { background-position: 200% 0; }
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
 .animate-shimmer {
-  background: linear-gradient(90deg, transparent, rgba(128,128,128,0.05), transparent);
+  background: linear-gradient(90deg, transparent, rgba(107,79,59,0.05), transparent);
   background-size: 200% 100%;
-  animation: shimmer 2s infinite;
+  animation: shimmer 2s infinite linear;
+}
+
+/* Laboratory Scrollbar */
+.scrollbar-neutral::-webkit-scrollbar {
+  width: 5px;
+}
+.scrollbar-neutral::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+.scrollbar-neutral::-webkit-scrollbar-thumb {
+  @apply bg-sand/40 rounded-full dark:bg-muted;
 }

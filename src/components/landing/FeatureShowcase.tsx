@@ -1,40 +1,43 @@
+"use client"
+
 import { FeatureCard } from './FeatureCard'
-import { Users, Target, Lightbulb, BarChart3, MousePointer, Shield } from 'lucide-react'
+import { Users, Target, Lightbulb, BarChart3, MousePointer, Shield, Sparkles } from 'lucide-react'
+import { Badge } from '@/components/ui/badge'
 
 const features = [
   {
     title: 'Multi-Persona Synthesis',
-    description: 'Generate 5+ diverse synthetic users with unique demographics, psychological profiles, and varied browsing intent.',
+    description: 'Construct 5+ diverse synthetic entities with localized psychographic profiles and varied browsing intent.',
     icon: Users,
     delay: 100
   },
   {
-    title: 'Continuous Behavioral Simulation',
-    description: 'Our engine runs hundreds of parallel user paths through your UI to identify bottleneck sequences.',
+    title: 'Continuous Simulation',
+    description: 'Neural engines execute hundreds of parallel user paths to identify bottleneck sequences at scale.',
     icon: Target,
     delay: 200
   },
   {
-    title: 'Friction Point Detection',
-    description: 'Get AI-prioritized lists of specific UX friction points with semantic reasoning for each issue.',
+    title: 'Friction Cluster Detection',
+    description: 'Prioritize strategic UX fixes with AI-reasoned observations for every identified friction cluster.',
     icon: Lightbulb,
     delay: 300
   },
   {
-    title: 'Conversion Likelihood Maps',
-    description: 'Real-time heatmaps that predict exactly where users drop off based on their psychographic profiles.',
+    title: 'Interaction Spectrum',
+    description: 'Predictive thermal maps that visualize esattamente where user intuition deviates from intended paths.',
     icon: BarChart3,
     delay: 400
   },
   {
-    title: 'Pre-launch Interaction Data',
-    description: 'Visualize every click, scroll, and hover with interactive heatmaps before writing a single line of tracking code.',
+    title: 'Pre-Audit Visuals',
+    description: 'Audit every click, scroll, and hover with interactive heatmaps before deploying a single tracker.',
     icon: MousePointer,
     delay: 500
   },
   {
-    title: 'Zero-Knowledge Privacy',
-    description: 'Perform enterprise-grade user research without collecting a single real user biometric or PII.',
+    title: 'Sovereign Privacy',
+    description: 'Execute high-fidelity behavioral research without infringing on real customer biometric data or PII.',
     icon: Shield,
     delay: 600
   }
@@ -42,24 +45,27 @@ const features = [
 
 export function FeatureShowcase() {
   return (
-    <section className="relative py-32 px-6">
-      {/* Subtle Background Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-violet/5 blur-[160px] -z-10" />
+    <section className="relative py-24 px-6 bg-oat/30 border-t border-sand">
+      {/* Refined Ambient Glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-3/4 bg-coffee/5 blur-[160px] -z-10" />
       
-      <div className="max-w-7xl mx-auto relative cursor-default">
-        {/* Section header */}
-        <div className="text-center mb-20 space-y-4">
-          <Badge variant="emerald" className="px-4 py-1.5 uppercase font-bold tracking-[0.1em] text-[10px]">Capabilities</Badge>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight premium-gradient-text leading-[1.1]">
-            Everything you need for <br/> <span className="violet-gradient-text italic">surgical precision optimization.</span>
+      <div className="layout-container relative cursor-default">
+        {/* Editorial Section Header */}
+        <div className="text-center mb-16 space-y-6 animate-in fade-in slide-in-from-bottom-8">
+          <Badge variant="outline" className="bg-white px-4 py-1 uppercase font-black tracking-[0.3em] text-[10px] text-coffee/30 border-sand shadow-sm rounded-full inline-flex items-center gap-2">
+            <Sparkles className="h-3 w-3 text-terracotta" />
+            Capabilities
+          </Badge>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tighter text-coffee leading-[1.1] max-w-3xl mx-auto">
+            Laboratory-grade insight for <br/> <span className="text-terracotta italic font-normal">surgical architectural precision.</span>
           </h2>
-          <p className="text-lg text-muted-foreground/80 max-w-2xl mx-auto leading-relaxed">
-            Stop guessing and start predicting. Use AI simulation to know exactly how your product will perform.
+          <p className="text-lg text-coffee/40 max-w-xl mx-auto leading-relaxed">
+            Stop guessing and start predicting. Use behavior-grade simulation to diagnose exactly where your product studio deviates.
           </p>
         </div>
 
-        {/* Features grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        {/* Features Grid - Balanced Gap */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
           {features.map((feature, index) => (
             <FeatureCard
               key={index}
@@ -74,5 +80,3 @@ export function FeatureShowcase() {
     </section>
   )
 }
-
-import { Badge } from '@/components/ui/badge'

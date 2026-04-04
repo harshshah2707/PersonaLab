@@ -2,7 +2,7 @@
 
 import React, { useState, useMemo, memo } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { MousePointer, User, Info, X } from 'lucide-react'
+import { MousePointer, User, Info, X, Sparkles, Target, Zap, Activity } from 'lucide-react'
 import type { HeatmapPoint } from '@/types'
 import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
@@ -13,7 +13,6 @@ interface HeatmapSectionProps {
   highlightedPersona?: string | null
 }
 
-// Memoized Heatmap Point component for performance
 const HeatmapDot = memo(({ 
   point, 
   isSelected, 
@@ -29,8 +28,8 @@ const HeatmapDot = memo(({
     <button
       onClick={() => onClick(point)}
       className={cn(
-        "heatmap-dot w-6 h-6 flex items-center justify-center animate-in zoom-in-50 duration-500 rounded-full cursor-pointer absolute transition-all",
-        isSelected ? 'z-30' : 'hover:z-20'
+        "heatmap-dot w-5 h-5 flex items-center justify-center animate-in zoom-in-50 duration-700 rounded-full cursor-pointer absolute transition-all z-20",
+        isSelected ? 'scale-125' : 'hover:scale-110'
       )}
       style={{ 
         left: `${point.x}%`, 
@@ -38,33 +37,20 @@ const HeatmapDot = memo(({
         transform: 'translate(-50%, -50%)',
         animationDelay: `${index * 50}ms`
       }}
-      aria-label={`Interaction point: ${point.label}`}
     >
-       {/* High-Fidelity Thermal Glow */}
+       {/* Thermal Glow - Corrected institutional colors 🚀 🏁🌟 */}
        <div className={cn(
-         "absolute w-16 h-16 rounded-full blur-2xl opacity-40 animate-pulse transition-all duration-700",
-         point.type === 'emerald' ? 'bg-emerald' : 'bg-cyan'
-       )} />
-       <div className={cn(
-         "absolute w-8 h-8 rounded-full blur-md opacity-60",
-         point.type === 'emerald' ? 'bg-emerald' : 'bg-cyan'
+         "absolute w-12 h-12 rounded-full blur-xl opacity-30 animate-pulse transition-all duration-1000",
+         point.type === 'emerald' ? 'bg-emerald-500' : 'bg-orange-500'
        )} />
        
        {/* Core Interaction point */}
        <div className={cn(
-         "w-4 h-4 rounded-full border-2 border-white/40 flex items-center justify-center relative z-10",
-         point.type === 'emerald' ? 'bg-emerald shadow-[0_0_15px_rgba(16,185,129,0.5)]' : 'bg-cyan shadow-[0_0_15px_rgba(6,182,212,0.5)]'
+         "w-3.5 h-3.5 rounded-full border-2 border-white flex items-center justify-center relative z-10 shadow-lg",
+         point.type === 'emerald' ? 'bg-emerald-600' : 'bg-orange-600'
        )}>
-          <div className="w-1.5 h-1.5 rounded-full bg-white animate-ping" />
+          <div className="w-1 h-1 rounded-full bg-white/40 animate-ping" />
        </div>
-
-       {/* Distance Trigger for Hover visibility */}
-       {isSelected && (
-           <div className="absolute top-1/2 left-full translate-x-4 -translate-y-1/2 bg-popover border border-white/10 rounded-lg p-2 whitespace-nowrap shadow-xl z-50 animate-in slide-in-from-left-2 duration-200">
-               <p className="text-[10px] font-bold uppercase tracking-wider">{point.label}</p>
-               <p className="text-[9px] text-muted-foreground font-medium">{Math.round(point.intensity * 100)}% Conversion Friction</p>
-           </div>
-       )}
     </button>
   )
 })
@@ -73,65 +59,74 @@ HeatmapDot.displayName = 'HeatmapDot'
 
 export function HeatmapSection({ points, screenshotUrl, highlightedPersona }: HeatmapSectionProps) {
   const [selectedPoint, setSelectedPoint] = useState<HeatmapPoint | null>(null)
-
   const memoizedPoints = useMemo(() => points, [points])
 
   return (
-    <Card className="glass-card border-white/5 overflow-hidden group">
-      <CardHeader className="pb-6 border-b border-white/5 bg-white/[0.01]">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+    <Card className="metric-card bg-white overflow-hidden group border-border/60 shadow-sm rounded-[2.5rem]">
+      <CardHeader className="pb-4 pt-6 px-8 border-b border-border/30 bg-white/50 backdrop-blur-md">
+        <div className="flex items-center justify-between gap-4">
           <div className="space-y-1">
-            <CardTitle className="text-xl font-bold tracking-tight flex items-center gap-2.5">
-              <div className="p-1.5 rounded-lg bg-emerald/10 text-emerald">
-                <MousePointer className="w-4 h-4" />
+            <CardTitle className="text-2xl font-bold tracking-tight flex items-center gap-3 text-coffee">
+              <div className="p-2.5 rounded-2xl bg-coffee text-white shadow-lg transition-transform group-hover:scale-110 duration-500">
+                <Target className="w-5 h-5" />
               </div>
-              Predictive Interaction Map
-              <Badge variant="secondary" className="ml-1.5 h-5 px-1.5 text-[9px] opacity-40">
-                {points.length} Points
-              </Badge>
+              <span className="leading-none">Interaction Spectrum</span>
             </CardTitle>
-            <p className="text-xs text-muted-foreground font-medium uppercase tracking-widest">Synthetic Behavioral Clusters</p>
+            <p className="text-[10px] font-black uppercase tracking-[0.4em] text-coffee/20 px-1">Behavioral Matrix</p>
           </div>
           {highlightedPersona && (
-            <Badge variant="outline" className="bg-emerald/10 text-emerald border-emerald/20 px-3 py-1 gap-1.5 animate-in zoom-in-95 self-start sm:self-center">
-               <User className="h-3 w-3" />
-               <span className="text-[10px] font-bold uppercase tracking-wider">{highlightedPersona} Path</span>
+            <Badge variant="outline" className="bg-emerald-500/5 text-emerald-600 border-emerald-500/10 px-4 py-1.5 gap-2 rounded-full uppercase font-black tracking-widest text-[10px] hidden sm:flex shrink-0">
+               <User className="h-3.5 w-3.5" />
+               <span className="leading-none">{highlightedPersona} Trace</span>
             </Badge>
           )}
         </div>
       </CardHeader>
-      <CardContent className="p-6">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 pb-2">
-            {/* Map Area */}
+      
+      <CardContent className="p-6 md:p-8">
+        <div className="flex flex-col xl:flex-row gap-8">
+            {/* Map Area - Editorial Precise Viewport */}
             <div 
               className={cn(
-                "relative bg-background/50 border border-white/5 rounded-2xl overflow-hidden transition-all duration-700 shadow-inner group/map lg:col-span-9",
-                highlightedPersona && "border-emerald/20 shadow-[0_0_40px_rgba(16,185,129,0.03)]"
+                "relative bg-cream/10 border border-sand rounded-[2rem] overflow-hidden shadow-inner group/map aspect-[3/2] flex-1 min-h-[300px]",
+                highlightedPersona && "ring-4 ring-emerald-500/5"
               )}
-              style={{ height: '520px' }}
-              role="img"
-              aria-label="Website interaction heatmap"
             >
-              {/* Actual Site Screenshot Background */}
               {screenshotUrl ? (
                 <img 
                   src={screenshotUrl} 
-                  alt="Website Analysis" 
-                  className="absolute inset-0 w-full h-full object-contain bg-black/40 opacity-70 group-hover/map:opacity-90 transition-opacity duration-700"
+                  alt="Audit Snapshot" 
+                  className="absolute inset-0 w-full h-full object-cover grayscale-[0.05] brightness-[0.98] group-hover/map:brightness-100 transition-all duration-1000"
                 />
               ) : (
-                <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent flex items-center justify-center opacity-20">
-                   <div className="w-full h-full flex flex-col items-center justify-center space-y-2">
-                     <div className="w-24 h-24 rounded-2xl border border-dashed border-white/10" />
-                     <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/40 text-center px-4">Initializing AI Eye...</span>
+                <div className="absolute inset-0 bg-white flex items-center justify-center">
+                   {/* High-Fidelity Neural Substrate - Matching Mockup Design 🏁🌟 */}
+                   <div className="text-center space-y-6 relative z-30">
+                      <div className="relative mx-auto">
+                        <div className="absolute inset-0 bg-coffee/5 blur-3xl rounded-full" />
+                        <div className="w-20 h-20 rounded-3xl border border-sand/40 bg-white/80 flex items-center justify-center mx-auto relative shadow-2xl overflow-hidden animate-in zoom-in-95">
+                           <div className="absolute inset-0 bg-[linear-gradient(45deg,transparent_25%,rgba(107,79,59,0.05)_50%,transparent_75%)] bg-[size:250%_250%] animate-shimmer" />
+                           <Sparkles className="w-10 h-10 text-coffee/30 animate-pulse" />
+                        </div>
+                        <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-white border border-sand shadow-lg flex items-center justify-center animate-bounce">
+                           <Zap className="w-4 h-4 text-terracotta" />
+                        </div>
+                      </div>
+                      <div className="space-y-1">
+                        <p className="text-[11px] font-black uppercase tracking-[0.4em] text-coffee/30 italic animate-pulse">Awaiting Environment Scan</p>
+                        <div className="h-1 w-12 bg-sand/30 rounded-full mx-auto" />
+                      </div>
                    </div>
+                   
+                   {/* Architectural Background Grid */}
+                   <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.05)_1px,transparent_1px)] bg-[size:32px_32px] opacity-20 pointer-events-none" />
                 </div>
               )}
 
-              {/* Grid Pattern */}
-              <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse:60%_50%_at_50%_50%,#000_70%,transparent_100%)] z-10 pointer-events-none" />
+              {/* Neural Mesh Overlay */}
+              <div className="absolute inset-0 bg-[linear-gradient(to_right,var(--border)_1px,transparent_1px),linear-gradient(to_bottom,var(--border)_1px,transparent_1px)] bg-[size:40px_40px] opacity-[0.04] z-10 pointer-events-none" />
 
-              {/* Heatmap points */}
+              {/* Interaction Nodes Cluster */}
               <div className="relative z-20 w-full h-full">
                 {memoizedPoints.map((point, i) => (
                   <HeatmapDot
@@ -144,74 +139,85 @@ export function HeatmapSection({ points, screenshotUrl, highlightedPersona }: He
                 ))}
               </div>
               
-              {/* Tooltip Overlay */}
+              {/* Context Action Overlay */}
               {selectedPoint && (
-                <div className="absolute top-6 left-6 right-6 animate-in fade-in slide-in-from-top-4 duration-300 z-40">
-                  <div className="glass-panel border-white/10 rounded-2xl p-4 shadow-2xl bg-background/80 backdrop-blur-2xl flex items-center justify-between gap-4">
-                     <div className="flex items-center gap-3">
-                        <div className={cn("p-2 rounded-xl", selectedPoint.type === 'emerald' ? 'bg-emerald text-background' : 'bg-cyan text-background')}>
-                           <Info className="w-4 h-4" />
+                <div className="absolute bottom-8 left-8 right-8 animate-in slide-in-from-bottom-8 duration-700 z-40">
+                  <div className="bg-white/95 backdrop-blur-2xl border border-sand rounded-[1.5rem] p-5 shadow-2xl flex items-center justify-between gap-8 group/tooltip">
+                     <div className="flex items-center gap-5 min-w-0">
+                        <div className={cn("p-3 rounded-2xl shrink-0 shadow-lg transition-transform group-hover/tooltip:rotate-6", selectedPoint.type === 'emerald' ? 'bg-emerald-600 text-white' : 'bg-orange-600 text-white')}>
+                           <Zap className="w-5 h-5" />
                         </div>
-                        <div>
-                           <h4 className="font-bold text-sm tracking-tight">{selectedPoint.label}</h4>
-                           <p className="text-[10px] text-muted-foreground font-medium">{selectedPoint.description}</p>
+                        <div className="min-w-0">
+                           <h4 className="font-bold text-base text-coffee tracking-tight truncate">{selectedPoint.label}</h4>
+                           <p className="text-[11px] text-coffee/50 font-bold italic truncate tracking-tight">{selectedPoint.description}</p>
                         </div>
                      </div>
-                     <button onClick={() => setSelectedPoint(null)} className="p-1 hover:bg-white/5 rounded-lg transition-colors">
-                        <X className="w-4 h-4 text-muted-foreground" />
+                     <button onClick={() => setSelectedPoint(null)} className="p-2.5 bg-cream hover:bg-white rounded-xl border border-sand transition-all shadow-sm hover:scale-105 active:scale-95">
+                        <X className="w-4 h-4 text-coffee/20" />
                      </button>
                   </div>
                 </div>
               )}
             </div>
 
-            {/* Interaction List Sidebar */}
-            <div className="lg:col-span-3 space-y-3 max-h-[520px] overflow-y-auto pr-2 scrollbar-hide">
-               <div className="px-1 pb-2">
-                 <h4 className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 mb-4">Vision Cluster Log</h4>
-                 <div className="space-y-2">
-                    {memoizedPoints.length === 0 ? (
-                        <div className="py-8 text-center border border-dashed border-white/5 rounded-xl">
-                            <p className="text-[10px] font-bold uppercase text-muted-foreground/40">No clusters detected</p>
-                        </div>
-                    ) : (
-                      memoizedPoints.map(point => (
-                        <button
-                          key={`list-${point.id}`}
-                          onClick={() => setSelectedPoint(point)}
-                          className={cn(
-                            "w-full text-left p-3 rounded-xl border border-white/5 transition-all",
-                            "hover:border-white/10 hover:bg-white/5 group/p",
-                            selectedPoint?.id === point.id ? "bg-white/5 border-white/20 ring-1 ring-white/10" : "bg-white/[0.01]"
-                          )}
-                        >
-                           <div className="flex items-center gap-2 mb-1">
-                              <div className={cn("w-1.5 h-1.5 rounded-full", point.type === 'emerald' ? 'bg-emerald' : 'bg-cyan')} />
-                              <span className="text-[10px] font-black tracking-tight text-foreground/80 group-hover/p:text-foreground transition-colors uppercase">{point.label}</span>
+            {/* Qualitative Diagnostic Sidebar */}
+            <div className="xl:w-72 shrink-0 space-y-6">
+               <div className="flex items-center justify-between px-2">
+                  <div className="flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 rounded-full bg-coffee/20" />
+                    <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-coffee/20">Vision Cluster</h4>
+                  </div>
+                  <Badge variant="outline" className="text-[9px] px-2.5 py-0.5 rounded-full bg-sand/10 border-sand text-coffee/40 font-bold tracking-widest leading-none">
+                    {memoizedPoints.length} NODES
+                  </Badge>
+               </div>
+               
+               <div className="space-y-3 max-h-[340px] xl:max-h-[480px] overflow-y-auto pr-2 scrollbar-neutral transition-all">
+                  {memoizedPoints.length === 0 ? (
+                      <div className="py-20 text-center border-2 border-dashed border-sand rounded-[2rem] bg-cream/10">
+                          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-coffee/10 italic">Awaiting Telemetry</p>
+                      </div>
+                  ) : (
+                    memoizedPoints.map(point => (
+                      <button
+                        key={`list-${point.id}`}
+                        onClick={() => setSelectedPoint(point)}
+                        className={cn(
+                          "w-full text-left p-4 rounded-[1.5rem] border transition-all duration-500 group/p relative overflow-hidden",
+                          selectedPoint?.id === point.id 
+                            ? "bg-white border-coffee/10 shadow-xl ring-1 ring-coffee/5" 
+                            : "bg-cream/20 border-transparent hover:border-sand/40 hover:bg-white hover:shadow-lg"
+                        )}
+                      >
+                         <div className="flex items-center gap-3 mb-2 relative z-10">
+                            <div className={cn(
+                              "w-2 h-2 rounded-full shrink-0 shadow-sm", 
+                              point.type === 'emerald' ? 'bg-emerald-500' : 'bg-orange-500',
+                              selectedPoint?.id === point.id && "animate-pulse"
+                            )} />
+                            <span className={cn(
+                              "text-xs font-bold tracking-tight transition-colors truncate",
+                              selectedPoint?.id === point.id ? "text-coffee" : "text-coffee/40 group-hover/p:text-coffee/80"
+                            )}>{point.label}</span>
+                         </div>
+                         <p className="text-[10px] text-coffee/30 italic leading-snug line-clamp-2 pl-5 transition-colors group-hover:text-coffee/50 font-medium">{point.description}</p>
+                         
+                         {selectedPoint?.id === point.id && (
+                           <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-20">
+                              <Activity className="w-12 h-12 text-coffee" />
                            </div>
-                           <p className="text-[9px] text-muted-foreground/60 leading-tight line-clamp-2">{point.description}</p>
-                        </button>
-                      ))
-                    )}
-                 </div>
+                         )}
+                      </button>
+                    ))
+                  )}
+               </div>
+               
+               {/* Laboratory Disclaimer Substrate */}
+               <div className="p-4 rounded-2xl bg-coffee/5 border border-sand/30 flex items-center gap-3">
+                  <Info className="w-4 h-4 text-coffee/20 shrink-0" />
+                  <p className="text-[9px] text-coffee/40 leading-relaxed font-medium">Coordinate precision mapped to 1280x800 neural viewport. Visual nodes reflect behavioral hesitation clusters.</p>
                </div>
             </div>
-        </div>
-        
-        {/* Legend */}
-        <div className="flex flex-wrap items-center gap-10 mt-6 pt-6 border-t border-white/5">
-          <div className="flex items-center gap-3 group/leg cursor-help">
-            <div className="w-3 h-3 rounded-full bg-emerald shadow-[0_0_15px_rgba(16,185,129,0.5)] group-hover/leg:scale-110 transition-transform" />
-            <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 transition-colors group-hover/leg:text-muted-foreground">High Conversion Signal</span>
-          </div>
-          <div className="flex items-center gap-3 group/leg cursor-help">
-            <div className="w-3 h-3 rounded-full bg-cyan shadow-[0_0_15px_rgba(6,182,212,0.5)] group-hover/leg:scale-110 transition-transform" />
-            <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60 transition-colors group-hover/leg:text-muted-foreground">Complex Interaction Node</span>
-          </div>
-          <div className="ml-auto hidden md:flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/30">
-            <MousePointer className="w-3 h-3" />
-            <span>Interactive Map Active</span>
-          </div>
         </div>
       </CardContent>
     </Card>

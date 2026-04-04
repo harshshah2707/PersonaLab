@@ -1,63 +1,52 @@
 "use client"
 
-import React, { useState, useMemo } from 'react'
+import React, { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Lightbulb, ChevronDown, ChevronUp, Filter, ArrowRight, CheckCircle, AlertTriangle, Info, Sparkles } from 'lucide-react'
+import { Lightbulb, ChevronDown, ArrowRight, AlertTriangle, Info, CheckCircle, Sparkles } from 'lucide-react'
 import type { AIInsight } from '@/types'
 import { cn } from '@/lib/utils'
-
-export type InsightPriority = 'high' | 'medium' | 'low' | 'all'
-export type InsightCategory = 'navigation' | 'content' | 'conversion' | 'design' | 'all'
 
 export interface AIInsightsPanelProps {
   insights: AIInsight[]
 }
 
-const PRIORITY_ORDER: Record<string, number> = { high: 0, medium: 1, low: 2 }
-const CATEGORY_LABELS: Record<string, string> = {
-  navigation: 'Nav',
-  content: 'Content',
-  conversion: 'CVR',
-  design: 'UI/UX'
-}
-
 const PRIORITY_CONFIG = {
-  high: { icon: AlertTriangle, color: 'text-red-500', bg: 'bg-red-500/5', border: 'border-red-500/20' },
-  medium: { icon: Info, color: 'text-amber-500', bg: 'bg-amber-500/5', border: 'border-amber-500/20' },
-  low: { icon: CheckCircle, color: 'text-emerald', bg: 'bg-emerald/5', border: 'border-emerald/20' }
+  high: { icon: AlertTriangle, color: 'text-terracotta', bg: 'bg-terracotta/5', border: 'border-terracotta/20' },
+  medium: { icon: Info, color: 'text-coffee', bg: 'bg-coffee/5', border: 'border-sand' },
+  low: { icon: CheckCircle, color: 'text-forest', bg: 'bg-forest/5', border: 'border-forest/20' }
 }
 
 export function AIInsightsPanel({ insights }: AIInsightsPanelProps) {
   const [expandedInsight, setExpandedInsight] = useState<string | null>(null)
 
   return (
-    <Card className="glass-card border-white/5 overflow-hidden group">
-      <CardHeader className="pb-6 border-b border-white/5 bg-white/[0.01]">
-        <div className="flex items-center justify-between">
-          <div className="space-y-1">
-            <CardTitle className="text-xl font-bold tracking-tight flex items-center gap-2.5">
-              <div className="p-1.5 rounded-lg bg-violet/10 text-violet">
-                <Lightbulb className="w-4 h-4" />
+    <Card className="metric-card bg-white overflow-hidden group border-sand">
+      <CardHeader className="pb-8 border-b border-sand bg-cream/30">
+        <div className="flex items-center justify-between gap-4">
+          <div className="space-y-2 min-w-0">
+            <CardTitle className="text-xl font-bold tracking-tighter flex items-center gap-3">
+              <div className="p-2.5 rounded-2xl bg-coffee text-white shadow-lg shadow-coffee/10">
+                <Lightbulb className="w-5 h-5" />
               </div>
-              Strategic AI Insights
+              <span className="truncate">Strategic AI</span>
             </CardTitle>
-            <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">Neural Engine Observations</p>
+            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-coffee/30 truncate">Neural Engine Pulse</p>
           </div>
-          <Badge variant="outline" className="bg-violet/10 text-violet border-violet/20 px-2 py-0.5 animate-pulse">
-             <Sparkles className="h-3 w-3 mr-1" />
-             <span className="text-[9px] font-black uppercase tracking-tighter">Live Analysis</span>
+          <Badge variant="outline" className="bg-white border-sand text-coffee/60 px-3 py-1 rounded-full shrink-0">
+             <Sparkles className="h-3.5 w-3.5 mr-2 text-terracotta animate-pulse" />
+             <span className="text-[10px] font-black uppercase tracking-tighter">Live Audit</span>
           </Badge>
         </div>
       </CardHeader>
       
       <CardContent className="p-0">
-        <div className="max-h-[520px] overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
-          <div className="p-6 space-y-4">
+        <div className="max-h-[600px] overflow-y-auto scrollbar-neutral transition-all">
+          <div className="p-8 space-y-6">
             {insights.length === 0 ? (
-              <div className="text-center py-12 text-muted-foreground text-sm font-medium italic">
-                Optimizing neural paths... virtually clear.
+              <div className="text-center py-20 text-coffee/20 text-xs font-black uppercase tracking-[0.3em] italic">
+                Optimizing neural paths...
               </div>
             ) : (
               insights.map((insight, i) => {
@@ -69,63 +58,63 @@ export function AIInsightsPanel({ insights }: AIInsightsPanelProps) {
                   <div
                     key={insight.id}
                     className={cn(
-                      "rounded-[1.25rem] border transition-all duration-500 animate-in slide-in-from-right-4 group/insight",
-                      priorityConfig.bg,
-                      priorityConfig.border,
-                      isExpanded ? "ring-1 ring-white/10 shadow-2xl" : "hover:bg-white/[0.02]"
+                      "rounded-[2rem] border transition-all duration-700 animate-in slide-in-from-right-8 group/insight",
+                      isExpanded ? "bg-white border-terracotta/40 shadow-xl ring-4 ring-terracotta/5" : "bg-white border-sand hover:border-coffee/20 hover:shadow-lg"
                     )}
-                    style={{ animationDelay: `${i * 100}ms` }}
+                    style={{ animationDelay: `${i * 150}ms` }}
                   >
                     <div 
-                      className="p-4 cursor-pointer"
+                      className="p-6 cursor-pointer"
                       onClick={() => setExpandedInsight(isExpanded ? null : insight.id)}
                     >
-                      <div className="flex items-start justify-between gap-4">
-                        <div className="flex items-start gap-4">
-                          <div className={cn("p-2 rounded-xl mt-0.5 shrink-0 transition-transform duration-500 group-hover/insight:scale-110", priorityConfig.bg, priorityConfig.color)}>
-                            <PriorityIcon className="w-4 h-4" />
+                      <div className="flex items-start justify-between gap-6">
+                        <div className="flex flex-1 items-start gap-5 min-w-0">
+                          <div className={cn("p-3.5 rounded-2xl mt-0.5 shrink-0 transition-all duration-700 group-hover/insight:scale-110", priorityConfig.bg, priorityConfig.color, "border border-current/10")}>
+                            <PriorityIcon className="w-5 h-5" />
                           </div>
-                          <div className="space-y-1">
-                            <h4 className="font-bold text-sm tracking-tight text-foreground/90 leading-snug">{insight.title}</h4>
+                          <div className="space-y-2 min-w-0">
+                            <h4 className="font-bold text-base tracking-tight text-coffee leading-snug truncate">{insight.title}</h4>
                             <p className={cn(
-                              "text-xs text-muted-foreground leading-relaxed transition-all",
+                              "text-[13px] text-coffee/50 leading-relaxed transition-all font-medium",
                               !isExpanded && "line-clamp-2"
                             )}>
                               {insight.description}
                             </p>
                           </div>
                         </div>
-                        <div className="shrink-0 flex flex-col items-end gap-2">
-                           <div className="flex gap-1">
-                              <Badge variant="outline" className={cn("text-[8px] font-black uppercase tracking-tighter h-4 px-1.5", priorityConfig.color, priorityConfig.border)}>
+                        <div className="shrink-0 flex flex-col items-end gap-3 self-center">
+                           <div className="flex gap-2">
+                              <Badge variant="outline" className={cn("text-[9px] font-black uppercase tracking-widest h-5 px-2.5 rounded-lg border-2", priorityConfig.color, priorityConfig.border)}>
                                 {insight.priority}
                               </Badge>
                            </div>
-                           {isExpanded ? <ChevronUp className="w-3.5 h-3.5 text-muted-foreground/40" /> : <ChevronDown className="w-3.5 h-3.5 text-muted-foreground/40" />}
+                           <div className={cn("transition-transform duration-500", isExpanded && "rotate-180")}>
+                             <ChevronDown className="w-4 h-4 text-coffee/20" />
+                           </div>
                         </div>
                       </div>
 
                       {isExpanded && (
-                        <div className="mt-6 space-y-5 animate-in fade-in zoom-in-95 duration-300">
-                          <div className="p-4 rounded-xl bg-black/20 border border-white/5 space-y-3">
-                             <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-emerald">
-                               <ArrowRight className="w-3 h-3" />
-                               <span>Implementation Strategy</span>
+                        <div className="mt-8 space-y-6 animate-in fade-in slide-in-from-top-4 duration-700">
+                          <div className="p-6 rounded-[1.5rem] bg-coffee border border-coffee shadow-inner space-y-4">
+                             <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-[0.3em] text-white/40">
+                               <ArrowRight className="w-4 h-4 text-terracotta" />
+                               <span>Implementation Logic</span>
                              </div>
-                             <p className="text-xs text-foreground/70 leading-relaxed italic">{insight.recommendation}</p>
+                             <p className="text-[13px] text-white/80 leading-relaxed font-bold italic pr-4">{insight.recommendation}</p>
                           </div>
                           
-                          <div className="flex items-center justify-between pt-2">
-                             <div className="flex items-center gap-3">
-                               <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/40">Confidence</span>
-                               <div className="flex gap-1">
+                          <div className="flex items-center justify-between pt-2 border-t border-sand">
+                             <div className="flex items-center gap-4">
+                               <span className="text-[10px] font-black uppercase tracking-[0.3em] text-coffee/20">Poise Confidence</span>
+                               <div className="flex gap-1.5">
                                  {[1,2,3,4,5].map(dot => (
-                                   <div key={dot} className={cn("w-1.5 h-1.5 rounded-full", dot <= 4 ? "bg-violet" : "bg-white/5")} />
+                                   <div key={dot} className={cn("w-2 h-2 rounded-full transition-all duration-700", dot <= 4 ? "bg-coffee scale-110" : "bg-sand")} />
                                  ))}
                                </div>
                              </div>
-                             <Button size="sm" className="h-8 rounded-lg bg-foreground text-background font-bold text-[10px] uppercase tracking-wider hover:opacity-90 active:scale-95">
-                               Apply Fix
+                             <Button size="sm" className="h-10 rounded-2xl bg-terracotta text-white font-black text-[11px] uppercase tracking-[0.2em] hover:opacity-90 active:scale-95 shadow-xl shadow-terracotta/10 px-6 border-0">
+                               Deploy Fix
                              </Button>
                           </div>
                         </div>

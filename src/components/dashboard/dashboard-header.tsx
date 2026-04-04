@@ -1,6 +1,6 @@
 "use client"
 
-import { RefreshCw, Download, Filter, Calendar, AlertCircle, User, Globe, Share2 } from 'lucide-react'
+import { RefreshCw, Download, Globe, Share2, Calendar, AlertCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { useDashboard } from '@/contexts/DashboardContext'
@@ -13,8 +13,8 @@ interface DashboardHeaderProps {
   personaName?: string | null
 }
 
-export function DashboardHeader({ title, subtitle, showPersonaBadge, personaName }: DashboardHeaderProps) {
-  const { refreshAnalysis, isAnalyzing, isRefreshing, analysisUrl, lastUpdated, isDataStale, updateError, clearError } = useDashboard()
+export function DashboardHeader({ title, showPersonaBadge, personaName }: DashboardHeaderProps) {
+  const { refreshAnalysis, isAnalyzing, isRefreshing, analysisUrl, lastUpdated } = useDashboard()
 
   const formatLastUpdated = () => {
     if (!lastUpdated) return 'Never'
@@ -26,76 +26,55 @@ export function DashboardHeader({ title, subtitle, showPersonaBadge, personaName
   }
 
   return (
-    <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-10 pb-8 border-b border-white/5">
-      <div className="space-y-4 overflow-hidden">
+    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8 pb-6 border-b border-sand/40">
+      <div className="space-y-2">
         <div className="flex items-center gap-3">
-           <div className="p-2.5 rounded-xl bg-violet/10 border border-violet/20 hidden sm:block shadow-lg shadow-violet/5">
-             <Globe className="w-5 h-5 text-violet" />
+           <div className="p-2 rounded-xl bg-coffee/5 border border-sand hidden sm:block">
+             <Globe className="w-4 h-4 text-coffee/20" />
            </div>
-           <div className="space-y-1 overflow-hidden">
-             <div className="flex items-center gap-3 flex-wrap">
-               <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">{title}</h1>
+           <div className="space-y-0.5">
+             <div className="flex items-center gap-2.5 flex-wrap">
+               <h1 className="text-xl md:text-2xl font-bold tracking-tight text-coffee">{title}</h1>
                {showPersonaBadge && personaName && (
-                 <Badge variant="outline" className="bg-emerald/10 text-emerald border-emerald/20 px-3 py-0.5 gap-1.5 animate-in zoom-in-95">
-                   <User className="h-3 w-3" />
-                   <span className="text-[10px] font-black uppercase tracking-wider">{personaName} View</span>
+                 <Badge variant="outline" className="bg-terracotta/5 text-terracotta border-terracotta/10 px-2 py-0 h-5 gap-1 animate-in zoom-in-95">
+                   <div className="w-1 h-1 rounded-full bg-current" />
+                   <span className="text-[9px] font-black uppercase tracking-wider">{personaName} Mode</span>
                  </Badge>
                )}
              </div>
              {analysisUrl && (
-                <div className="flex items-center gap-2 text-sm text-muted-foreground overflow-hidden">
-                  <span className="font-bold px-2 py-0.5 rounded bg-white/5 border border-white/10 text-[9px] uppercase tracking-widest shrink-0">Active URL</span>
-                  <span className="text-emerald hover:underline cursor-pointer transition-all truncate max-w-[150px] sm:max-w-md font-medium">{analysisUrl}</span>
+                <div className="flex items-center gap-2 text-[10px] font-bold text-coffee/30 overflow-hidden">
+                  <span className="uppercase tracking-[0.2em] shrink-0">Node:</span>
+                  <span className="hover:text-terracotta cursor-pointer transition-all truncate max-w-[200px] sm:max-w-md font-medium">{analysisUrl}</span>
                 </div>
               )}
            </div>
         </div>
-
-        <div className="flex flex-wrap items-center gap-6 text-[10px] font-bold uppercase tracking-[0.2em]">
-          <div className="flex items-center gap-2 text-muted-foreground/40">
-            <Calendar className="w-3.5 h-3.5" />
-            <span>Updated {formatLastUpdated()}</span>
-          </div>
-          {isDataStale && (
-            <div className="flex items-center gap-2 text-amber-500 animate-pulse">
-              <AlertCircle className="w-3.5 h-3.5" />
-              <span>Stale Detection</span>
-            </div>
-          )}
-          {updateError && (
-             <button onClick={clearError} className="flex items-center gap-2 text-red-500 hover:scale-105 transition-transform active:scale-95">
-               <AlertCircle className="w-3.5 h-3.5" />
-               <span>Sync Error — Click to Reset</span>
-             </button>
-          )}
-        </div>
       </div>
       
-      <div className="flex items-center gap-3 shrink-0">
-        <div className="flex p-1 rounded-xl bg-white/[0.03] border border-white/5 shadow-inner">
+      <div className="flex items-center gap-4 shrink-0">
+        <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-coffee/10 px-4 py-1.5 border border-sand/40 rounded-full bg-cream/20">
+          <Calendar className="w-3 h-3" />
+          <span>Synced {formatLastUpdated()}</span>
+        </div>
+
+        <div className="flex gap-2">
           <Button 
-            variant="ghost" 
+            variant="outline" 
             size="sm"
             onClick={refreshAnalysis}
             disabled={isAnalyzing || isRefreshing}
-            className="h-9 px-4 rounded-lg hover:bg-white/5 text-[10px] font-black uppercase tracking-wider gap-2 transition-all active:scale-95"
+            className="h-9 px-4 rounded-xl border-sand bg-white text-[10px] font-black uppercase tracking-widest gap-2 hover:bg-cream"
           >
             <RefreshCw className={cn("h-3.5 w-3.5", isRefreshing && "animate-spin")} />
-            {isRefreshing ? 'Syncing...' : 'Re-run Analysis'}
+            {isRefreshing ? 'Syncing...' : 'Re-run'}
           </Button>
-          
-          <div className="w-px h-4 bg-white/10 self-center mx-1" />
 
-          <Button variant="ghost" size="sm" className="h-9 px-4 rounded-lg hover:bg-white/5 text-[10px] font-black uppercase tracking-wider gap-2 transition-all active:scale-95">
-            <Download className="h-3.5 w-3.5" />
-            Report
+          <Button size="sm" className="h-9 px-5 rounded-xl bg-coffee text-white hover:bg-coffee/90 font-black text-[10px] uppercase tracking-widest shadow-lg shadow-coffee/10 gap-2">
+            <Share2 className="h-3.5 w-3.5" />
+            Share
           </Button>
         </div>
-
-        <Button size="sm" className="h-11 px-6 rounded-xl bg-foreground text-background hover:bg-foreground/90 font-black text-xs uppercase tracking-widest shadow-2xl shadow-white/5 gap-2 transition-all active:scale-95">
-          <Share2 className="h-4 w-4" />
-          Share
-        </Button>
       </div>
     </div>
   )

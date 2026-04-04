@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { MessageSquare, Send, User, ChevronRight, AlertCircle, TrendingDown } from 'lucide-react'
+import { MessageSquare, Send, User, ChevronRight, AlertCircle, TrendingDown, X, Sparkles } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { PersonaProfile } from '@/types'
 
@@ -25,7 +25,6 @@ export function PersonaChat({ persona, onClose }: PersonaChatProps) {
   const [isTyping, setIsTyping] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
 
-  // Initial Greeting from Persona
   useEffect(() => {
     setMessages([
       {
@@ -44,22 +43,14 @@ export function PersonaChat({ persona, onClose }: PersonaChatProps) {
 
   const handleSend = async () => {
     if (!inputValue.trim()) return
-
-    const userMsg: Message = {
-      role: 'user',
-      text: inputValue,
-      timestamp: new Date()
-    }
-
+    const userMsg: Message = { role: 'user', text: inputValue, timestamp: new Date() }
     setMessages(prev => [...prev, userMsg])
     setInputValue('')
     setIsTyping(true)
 
-    // Simulate persona response based on their pain points and motivations
     setTimeout(() => {
       let response = ""
       const q = userMsg.text.toLowerCase()
-
       if (q.includes('why') || q.includes('convert') || q.includes('buy')) {
         response = `To be honest, ${persona.painPoints[0]}. I was looking for ${persona.goal}, but the interface felt ${persona.behaviorPattern.browsingStyle === 'scanner' ? 'cluttered' : 'confusing'}.`
       } else if (q.includes('price') || q.includes('cost')) {
@@ -70,53 +61,49 @@ export function PersonaChat({ persona, onClose }: PersonaChatProps) {
         response = `My goal is ${persona.goal}. If you could fix the ${persona.painPoints[1] || 'navigation'}, I'd be much more likely to return.`
       }
 
-      setMessages(prev => [...prev, {
-        role: 'persona',
-        text: response,
-        timestamp: new Date()
-      }])
+      setMessages(prev => [...prev, { role: 'persona', text: response, timestamp: new Date() }])
       setIsTyping(false)
-    }, 1000)
+    }, 1200)
   }
 
   return (
-    <Card className="persona-chat border-white/10 bg-card/40 backdrop-blur-3xl shadow-2xl overflow-hidden flex flex-col h-[500px]">
-      <CardHeader className="border-b border-white/5 py-4 px-6 flex-row items-center justify-between space-y-0">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-emerald/10 border border-emerald/20 flex items-center justify-center">
-            <MessageSquare className="w-5 h-5 text-emerald" />
+    <Card className="persona-chat border-sand bg-white shadow-2xl overflow-hidden flex flex-col h-[600px] rounded-[2.5rem] animate-in slide-in-from-bottom-8 duration-700">
+      <CardHeader className="border-b border-sand py-6 px-8 flex-row items-center justify-between space-y-0 bg-cream/30">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-2xl bg-coffee border-4 border-white shadow-lg flex items-center justify-center rotate-3">
+            <span className="text-xl font-black text-white">{persona.name[0]}</span>
           </div>
           <div>
-            <CardTitle className="text-sm font-black uppercase tracking-wider">{persona.name}</CardTitle>
-            <CardDescription className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest flex items-center gap-1">
-              <TrendingDown className="w-3 h-3 text-red-500" />
+            <CardTitle className="text-lg font-bold text-coffee tracking-tighter">{persona.name}</CardTitle>
+            <CardDescription className="text-[10px] font-black text-terracotta uppercase tracking-[0.2em] flex items-center gap-2">
+              <TrendingDown className="w-3.5 h-3.5" />
               Non-Converter Archetype
             </CardDescription>
           </div>
         </div>
-        <Button variant="ghost" size="sm" onClick={onClose} className="text-muted-foreground hover:text-foreground">
-          <X className="w-4 h-4" />
+        <Button variant="ghost" size="icon" onClick={onClose} className="rounded-xl hover:bg-white text-coffee/20 hover:text-terracotta transition-all">
+          <X className="w-5 h-5" />
         </Button>
       </CardHeader>
 
-      <CardContent className="flex-1 overflow-y-auto p-6 space-y-4 scrollbar-hide" ref={scrollRef}>
+      <CardContent className="flex-1 overflow-y-auto p-10 space-y-8 scrollbar-neutral" ref={scrollRef}>
         {messages.map((msg, idx) => (
           <div key={idx} className={cn(
-            "flex gap-3 animate-in fade-in slide-in-from-bottom-2 duration-300",
+            "flex gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500",
             msg.role === 'user' ? "flex-row-reverse" : ""
           )}>
             <div className={cn(
-              "w-8 h-8 rounded-full flex items-center justify-center shrink-0 border",
-              msg.role === 'user' ? "bg-foreground border-foreground" : "bg-emerald/10 border-emerald/20"
+              "w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 border-2 shadow-sm transition-transform duration-500 hover:scale-110",
+              msg.role === 'user' ? "bg-white border-sand text-coffee" : "bg-coffee border-coffee text-white"
             )}>
-              {msg.role === 'user' ? <User className="w-4 h-4 text-background" /> : <span className="text-[10px] font-black text-emerald">{persona.name[0]}</span>}
+              {msg.role === 'user' ? <User className="w-5 h-5" /> : <Sparkles className="w-5 h-5" />}
             </div>
             
             <div className={cn(
-              "max-w-[80%] p-3 rounded-2xl text-xs font-medium leading-relaxed",
+              "max-w-[75%] p-5 rounded-[1.5rem] text-[13px] font-medium leading-relaxed shadow-sm",
               msg.role === 'user' 
-                ? "bg-foreground/10 text-foreground rounded-tr-none" 
-                : "bg-white/5 text-muted-foreground rounded-tl-none border border-white/5"
+                ? "bg-cream text-coffee rounded-tr-none border border-sand" 
+                : "bg-white text-coffee/70 rounded-tl-none border border-sand italic"
             )}>
               {msg.text}
             </div>
@@ -124,31 +111,31 @@ export function PersonaChat({ persona, onClose }: PersonaChatProps) {
         ))}
 
         {isTyping && (
-          <div className="flex gap-3">
-            <div className="w-8 h-8 rounded-full bg-emerald/10 border border-emerald/20 flex items-center justify-center shrink-0">
-               <span className="text-[10px] font-black text-emerald animate-pulse">...</span>
+          <div className="flex gap-4 animate-pulse">
+            <div className="w-10 h-10 rounded-2xl bg-coffee border-2 border-coffee flex items-center justify-center shrink-0">
+               <span className="text-[10px] font-black text-white">...</span>
             </div>
           </div>
         )}
       </CardContent>
 
-      <div className="p-4 border-t border-white/5 bg-white/[0.02]">
+      <div className="p-8 border-t border-sand bg-cream/30">
         <div className="relative group">
           <Input 
             placeholder={`Ask ${persona.name.split(' ')[0]} why they left...`}
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-            className="pr-12 h-11 rounded-xl bg-white/5 border-white/5 focus:bg-white/10 transition-all font-medium"
+            className="pr-16 h-16 rounded-2xl bg-white border-2 border-sand focus:border-coffee/20 transition-all font-bold text-coffee placeholder:text-coffee/20 shadow-inner"
           />
           <Button 
             size="icon" 
             variant="ghost" 
             onClick={handleSend}
             disabled={!inputValue.trim() || isTyping}
-            className="absolute right-1 top-1 w-9 h-9 rounded-lg hover:bg-emerald/20 hover:text-emerald text-muted-foreground transition-all"
+            className="absolute right-2 top-2 w-12 h-12 rounded-xl hover:bg-coffee hover:text-white text-coffee/20 transition-all"
           >
-            <Send className="w-4 h-4" />
+            <Send className="w-5 h-5" />
           </Button>
         </div>
       </div>
@@ -156,11 +143,4 @@ export function PersonaChat({ persona, onClose }: PersonaChatProps) {
   )
 }
 
-function X({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <line x1="18" y1="6" x2="6" y2="18"></line>
-      <line x1="6" y1="6" x2="18" y2="18"></line>
-    </svg>
-  )
-}
+export default PersonaChat

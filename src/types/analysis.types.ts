@@ -23,6 +23,7 @@ export interface AnalysisResponse {
   friction_points: FrictionPoint[]
   insights: string[]
   summary: string
+  screenshot_url?: string // 🚀 Snapshot from automation engine
   confidence_score?: number
   analysis_time_ms?: number
   reasoning_trace?: string

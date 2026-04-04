@@ -4,7 +4,6 @@ import { analyzeWithVision, generateMockAnalysis } from './visionService'
 import type { AnalysisRequest, AnalysisResponse } from '../../types/analysis.types'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
-// Prioritize Service Role for backend writes (bypasses RLS)
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 
                     process.env.SUPABASE_ANON_KEY || 
                     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || ''
@@ -12,6 +11,7 @@ const supabase = createClient(supabaseUrl, supabaseKey)
 
 /**
  * Controller to handle the end-to-end AI analysis pipeline.
+ * Captures real screenshot, extracts nodes, and runs Gemini Vision analysis.
  */
 export async function runAnalysisPipeline(req: AnalysisRequest): Promise<AnalysisResponse> {
   const { url, user_id, project_id, mock_mode = false } = req
@@ -24,9 +24,11 @@ export async function runAnalysisPipeline(req: AnalysisRequest): Promise<Analysi
   
   try {
     // Stage 1: Launch Browser Agent (Screenshot + Behavior + Elements)
+    // 🌍 Playwright + Chromium execution
     const agentResult = await runBrowserAgent({ url, project_id })
     
     // Stage 2: Prompt LLM with Screen + Trace + Clickable Data
+    // 🧠 Gemini 1.5 Flash Vision logic
     let analysis = await analyzeWithVision(agentResult.screenshot_buffer || null)
     
     // Fallback to high-quality mock if LLM fails or is empty
@@ -34,9 +36,11 @@ export async function runAnalysisPipeline(req: AnalysisRequest): Promise<Analysi
        console.warn('[AI-Engine] LLM returned null. Falling back to high-quality mock.')
        analysis = generateMockAnalysis(url)
     }
+
+    // 🚀 Attach real snapshot URL to the analysis result 🏁🌟
+    analysis.screenshot_url = agentResult.screenshot_url
     
     // Stage 3: Store result in Supabase
-    // Using jsonb for nested structures as per rules
     const { error } = await supabase
       .from('analyses')
       .insert({
@@ -46,9 +50,9 @@ export async function runAnalysisPipeline(req: AnalysisRequest): Promise<Analysi
         conversion_rate: analysis.conversion_rate,
         ux_score: analysis.ux_score,
         engagement_score: analysis.engagement_score,
-        personas: analysis.personas, // Corrected jsonb
-        friction_points: analysis.friction_points, // Corrected jsonb
-        insights: analysis.insights, // Corrected jsonb
+        personas: analysis.personas,
+        friction_points: analysis.friction_points,
+        insights: analysis.insights,
         summary: analysis.summary,
         metadata: {
           confidence: analysis.confidence_score,

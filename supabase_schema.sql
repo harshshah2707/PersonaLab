@@ -29,4 +29,26 @@ CREATE POLICY "Users can view their own analyses" ON public.analyses
 
 CREATE POLICY "Service role can do everything" ON public.analyses
     USING (true)
-    WITH CHECK (true);
+    -- 🏁🌟 ANALYSES STORAGE BUCKET CONFIGURATION
+-- This enables public read access to screenshots while securing uploads.
+-- Run these in your Supabase SQL Editor separately if you haven't created the bucket yet.
+
+-- 1. Create the 'analyses' bucket for behavioral snapshots
+-- Note: Replace this with manual creation in the Supabase Dashboard if using the UI.
+-- INSERT INTO storage.buckets (id, name, public) VALUES ('analyses', 'analyses', true) ON CONFLICT (id) DO NOTHING;
+
+-- 2. Storage RLS Policies
+-- Allow anyone to read analysis screenshots (required for public analytics)
+CREATE POLICY "Public Read Access" ON storage.objects
+    FOR SELECT TO public
+    USING (bucket_id = 'analyses');
+
+-- Allow our AI Engine (authenticated with Service Role) to upload snapshots
+CREATE POLICY "Service Role Upload" ON storage.objects
+    FOR INSERT TO authenticated
+    WITH CHECK (bucket_id = 'analyses');
+
+-- Allow users to delete their own project screenshots - high-fidelity privacy
+CREATE POLICY "Users Delete Own Screenshots" ON storage.objects
+    FOR DELETE TO authenticated
+    USING (bucket_id = 'analyses' AND (storage.foldername(name))[1] = auth.uid()::text);

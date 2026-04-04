@@ -15,8 +15,8 @@ const outfit = Outfit({
 })
 
 export const metadata: Metadata = {
-  title: "PersonaLab - AI Product Analytics",
-  description: "Test your product before users do with AI-powered synthetic user simulation",
+  title: "PersonaLab | Laboratory-Grade Behavioral Simulation",
+  description: "Advanced synthetic user audit studio for elite product teams. Simulate human intuition without real-user friction.",
 }
 
 export default function RootLayout({
@@ -26,15 +26,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning className="h-full">
-      <body className={`${inter.variable} ${outfit.variable} font-sans antialiased h-full overflow-x-hidden bg-background text-foreground`}>
+      <body className={`${inter.variable} ${outfit.variable} font-sans antialiased h-full overflow-x-hidden bg-background text-foreground selection:bg-accent/20 selection:text-accent transition-colors duration-500`}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
-          enableSystem
+          defaultTheme="system"
+          enableSystem={true}
           disableTransitionOnChange
         >
           <AuthProvider>
-            {children}
+            <div className="relative isolate min-h-screen">
+              {children}
+            </div>
           </AuthProvider>
         </ThemeProvider>
       </body>

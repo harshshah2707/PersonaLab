@@ -8,24 +8,27 @@ function cn(...inputs: ClassValue[]) {
 }
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-black uppercase tracking-[0.2em] transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-coffee focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:scale-95",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground shadow-sm hover:bg-primary/90 active:scale-[0.98]",
-        destructive: "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
-        outline: "border border-border bg-transparent shadow-sm hover:bg-accent hover:text-accent-foreground",
-        secondary: "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
-        ghost: "hover:bg-accent hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
-        emerald: "bg-primary text-primary-foreground shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_30px_rgba(16,185,129,0.5)]",
-        cyan: "bg-accent text-accent-foreground shadow-[0_0_20px_rgba(6,182,212,0.3)] hover:shadow-[0_0_30px_rgba(6,182,212,0.5)]",
+        default: "bg-coffee text-white shadow-xl shadow-coffee/10 hover:opacity-90",
+        destructive: "bg-terracotta text-white shadow-xl shadow-terracotta/10 hover:opacity-90",
+        outline: "border-2 border-sand bg-transparent text-coffee hover:bg-cream hover:border-coffee/20",
+        secondary: "bg-cream text-coffee border border-sand hover:bg-white shadow-sm",
+        ghost: "text-coffee/40 hover:text-coffee hover:bg-cream rounded-2xl",
+        link: "text-coffee underline-offset-8 hover:underline italic",
+        terracotta: "bg-terracotta text-white shadow-xl shadow-terracotta/20 hover:scale-[1.02]",
+        coffee: "bg-coffee text-white shadow-xl shadow-coffee/20 hover:scale-[1.02]",
+        forest: "bg-forest text-white shadow-xl shadow-forest/20 hover:scale-[1.02]",
+        paper: "bg-white border-2 border-sand text-coffee shadow-sm hover:border-coffee/20 hover:shadow-lg",
       },
       size: {
-        default: "h-10 px-4 py-2",
-        sm: "h-9 rounded-lg px-3",
-        lg: "h-12 rounded-xl px-8 text-base",
-        icon: "h-10 w-10",
+        default: "h-11 px-6",
+        sm: "h-9 rounded-xl px-4 text-[10px]",
+        lg: "h-14 rounded-2xl px-10 text-base",
+        xl: "h-16 rounded-[2rem] px-12 text-lg",
+        icon: "h-11 w-11 rounded-2xl",
       },
     },
     defaultVariants: {

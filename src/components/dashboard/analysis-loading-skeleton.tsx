@@ -9,10 +9,10 @@ import { Globe, Cpu, Zap, Activity } from 'lucide-react'
 const LOADING_STEPS = [
   { icon: Globe, msg: "Initializing Playwright Headless...", color: "text-emerald" },
   { icon: Activity, msg: "Navigating to Target URL...", color: "text-cyan" },
-  { icon: Target, msg: "Capturing High-Fidelity Website Snapshot...", color: "text-violet" },
+  { icon: Target, msg: "Capturing High-Fidelity Website Snapshot...", color: "text-cyan" },
   { icon: Cpu, msg: "Processing Visual Data with Gemini 1.5 Vision...", color: "text-emerald" },
-  { icon: Zap, msg: "Mapping Synthetic User Personas...", color: "text-amber" },
-  { icon: Activity, msg: "Quantifying Friction Points & Conversion Risk...", color: "text-red" }
+  { icon: Zap, msg: "Mapping Synthetic User Personas...", color: "text-emerald" },
+  { icon: Activity, msg: "Quantifying Friction Points & Conversion Risk...", color: "text-red-500" }
 ]
 
 import { Target } from 'lucide-react'

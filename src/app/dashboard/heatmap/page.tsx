@@ -18,10 +18,9 @@ export default function HeatmapPage() {
   } = useDashboard()
 
   return (
-    <div className="w-full px-4 sm:px-8 lg:px-12 py-10 max-w-[1600px] mx-auto animate-in fade-in duration-700">
+    <div className="layout-container py-12 animate-in fade-in duration-1000">
       <DashboardHeader 
         title="Interaction Map" 
-        subtitle="Visual Friction Hotspots"
         showPersonaBadge={!!selectedPersonaData}
         personaName={selectedPersonaData?.name}
       />
@@ -29,11 +28,10 @@ export default function HeatmapPage() {
       {isAnalyzing ? (
         <AnalysisLoadingSkeleton />
       ) : analysis ? (
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
             <div className="lg:col-span-8">
                 <HeatmapSection 
                     points={filteredHeatmapPoints}
-                    screenshotUrl={analysis.screenshotUrl}
                     highlightedPersona={selectedPersonaData?.name}
                 />
             </div>
@@ -42,7 +40,17 @@ export default function HeatmapPage() {
                 <FrictionPointsPanel points={filteredFrictionPoints} />
             </div>
         </div>
-      ) : null}
+      ) : (
+        <div className="flex flex-col items-center justify-center h-[50vh] text-center space-y-6">
+           <div className="w-16 h-16 rounded-[2rem] bg-coffee/5 border border-sand flex items-center justify-center text-coffee">
+              <span className="text-2xl">🔥</span>
+           </div>
+           <div className="space-y-2">
+              <h2 className="text-2xl font-bold tracking-tight">No Interaction Map</h2>
+              <p className="text-muted-foreground max-w-sm">Simulate your product's behavior to generate high-fidelity friction hotspots.</p>
+           </div>
+        </div>
+      )}
     </div>
   )
 }

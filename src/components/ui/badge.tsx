@@ -3,17 +3,17 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const badgeVariants = cva(
-  "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+  "inline-flex items-center rounded-full border px-3 py-1 text-[10px] font-black uppercase tracking-widest transition-all focus:outline-none focus:ring-2 focus:ring-coffee focus:ring-offset-2",
   {
     variants: {
       variant: {
-        default: "border-transparent bg-primary text-primary-foreground shadow",
-        secondary: "border-transparent bg-secondary text-secondary-foreground",
-        destructive: "border-transparent bg-destructive text-destructive-foreground shadow",
-        outline: "text-foreground",
-        emerald: "border-transparent bg-primary/20 text-primary shadow-[0_0_15px_rgba(16,185,129,0.3)]",
-        cyan: "border-transparent bg-accent/20 text-accent shadow-[0_0_15px_rgba(6,182,212,0.3)]",
-        warning: "border-transparent bg-yellow-500/20 text-yellow-500",
+        default: "border-transparent bg-coffee text-white shadow-sm",
+        secondary: "border-transparent bg-cream text-coffee",
+        destructive: "border-transparent bg-terracotta text-white shadow-sm",
+        outline: "border-sand bg-transparent text-coffee/60 hover:border-coffee/20 hover:text-coffee",
+        forest: "border-forest/20 bg-forest/10 text-forest",
+        terracotta: "border-terracotta/20 bg-terracotta/10 text-terracotta",
+        coffee: "border-sand bg-coffee/5 text-coffee",
       },
     },
     defaultVariants: {

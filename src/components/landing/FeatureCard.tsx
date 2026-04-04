@@ -13,26 +13,29 @@ interface FeatureCardProps {
 export function FeatureCard({ title, description, icon: Icon, className, delay = 0 }: FeatureCardProps) {
   return (
     <Card className={cn(
-      "glass-card group relative h-full animate-in fade-in slide-in-from-bottom-2 duration-700",
+      "metric-card bg-white group relative h-full border-sand overflow-hidden transition-all duration-700 animate-in fade-in slide-in-from-bottom-8",
       className
     )}
     style={{ animationDelay: `${delay}ms` }}
     >
-      <CardContent className="p-8 relative z-10">
-        <div className="mb-6 flex">
-           <div className="p-3 rounded-2xl bg-emerald/10 border border-emerald/20 text-emerald group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">
+      <CardContent className="p-10 relative z-10 space-y-6">
+        <div className="flex">
+           <div className="p-4 rounded-2xl bg-cream text-coffee border border-sand group-hover:bg-coffee group-hover:text-white group-hover:scale-110 group-hover:rotate-6 transition-all duration-700 shadow-sm">
              <Icon className="w-6 h-6" />
            </div>
         </div>
-        <h3 className="text-xl font-bold text-foreground mb-3 group-hover:translate-x-1 transition-transform duration-300">
-          {title}
-        </h3>
-        <p className="text-muted-foreground text-sm leading-relaxed group-hover:text-foreground/80 transition-colors">
-          {description}
-        </p>
+        <div className="space-y-3 min-w-0">
+          <h3 className="text-xl font-bold text-coffee tracking-tighter leading-snug group-hover:text-terracotta transition-colors">
+            {title}
+          </h3>
+          <p className="text-[13px] text-coffee/50 leading-relaxed font-medium transition-colors line-clamp-3">
+            {description}
+          </p>
+        </div>
       </CardContent>
-      {/* Decorative gradient corner on hover */}
-      <div className="absolute top-0 right-0 w-32 h-32 bg-emerald/5 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+      
+      {/* Editorial Shadow Accent */}
+      <div className="absolute inset-x-0 bottom-0 h-1.5 bg-gradient-to-r from-coffee/5 via-terracotta/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
     </Card>
   )
 }
