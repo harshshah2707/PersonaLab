@@ -101,7 +101,7 @@ export function PersonaCards({
             <Filter className="w-4 h-4 mr-1" />
             Filters
             {activeFilterCount > 0 && (
-              <Badge variant="emerald" className="ml-1 h-5 min-w-5">
+              <Badge variant="forest" className="ml-1 h-5 min-w-5">
                 {activeFilterCount}
               </Badge>
             )}
